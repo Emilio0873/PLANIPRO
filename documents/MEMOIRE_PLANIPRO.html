@@ -1,0 +1,1909 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mémoire — Conception et réalisation d'une application web de gestion des rendez-vous et activités professionnelles : cas de PLANIPRO</title>
+<style>
+  @page { size: A4; margin: 2.5cm 2.5cm 2.5cm 3cm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Times New Roman", Times, serif;
+    font-size: 12pt;
+    line-height: 1.6;
+    color: #111;
+    max-width: 21cm;
+    margin: 0 auto;
+    padding: 2cm;
+    text-align: justify;
+    background: #fff;
+  }
+  h1, h2, h3, h4 { font-family: "Times New Roman", Times, serif; color: #000; text-align: left; }
+  h1 { font-size: 16pt; text-transform: uppercase; margin-top: 2.5em; page-break-before: always; border-bottom: 2px solid #222; padding-bottom: .3em; }
+  h1.no-break { page-break-before: auto; }
+  h2 { font-size: 14pt; margin-top: 1.8em; }
+  h3 { font-size: 12pt; margin-top: 1.4em; font-style: italic; }
+  h4 { font-size: 12pt; margin-top: 1.2em; }
+  p { margin: 0.7em 0; text-indent: 1.2cm; }
+  p.no-indent { text-indent: 0; }
+  .cover { text-align: center; page-break-after: always; min-height: 24cm; display: flex; flex-direction: column; justify-content: space-between; padding: 1cm 0; }
+  .cover p { text-indent: 0; }
+  .cover .uni { font-size: 14pt; font-weight: bold; text-transform: uppercase; }
+  .cover .title-box { border: 3px double #000; padding: 1.5cm 1cm; margin: 2cm 0; }
+  .cover .title-box h1 { font-size: 15pt; border: none; page-break-before: auto; margin: 0; text-transform: uppercase; }
+  .abstract-box { border: 1px solid #444; padding: 1em 1.2em; margin: 1.5em 0; background: #fafafa; }
+  .abstract-box p { text-indent: 0; }
+  .figure-slot {
+    border: 2px dashed #666;
+    background: #f5f5f5;
+    padding: 1.8cm 1cm;
+    margin: 1.5em auto;
+    text-align: center;
+    page-break-inside: avoid;
+    max-width: 90%;
+  }
+  .figure-slot .fig-label { font-weight: bold; font-size: 11pt; }
+  .figure-slot .fig-hint { font-size: 10pt; color: #444; font-style: italic; margin-top: .5em; display: block; }
+  .figure-slot .fig-caption { font-size: 11pt; margin-top: .8em; font-style: italic; }
+  table { border-collapse: collapse; width: 100%; margin: 1.2em 0; font-size: 11pt; page-break-inside: avoid; }
+  th, td { border: 1px solid #333; padding: 6px 8px; vertical-align: top; }
+  th { background: #e8e8e8; text-align: center; }
+  .table-caption { text-align: center; font-style: italic; font-size: 11pt; margin: .3em 0 1em; text-indent: 0; }
+  ul, ol { margin: 0.6em 0 0.6em 1.5cm; }
+  li { margin: 0.35em 0; }
+  .toc a { text-decoration: none; color: #000; }
+  .toc li { margin: 0.4em 0; }
+  .toc .ch { font-weight: bold; margin-top: 0.8em; list-style: none; margin-left: 0; }
+  .ref { font-size: 11pt; margin: 0.55em 0; text-indent: -1.2cm; padding-left: 1.2cm; }
+  .page-break { page-break-before: always; }
+  .center { text-align: center; text-indent: 0; }
+  .small { font-size: 10pt; }
+  .dedication { text-align: center; font-style: italic; page-break-after: always; padding-top: 6cm; }
+  blockquote { margin: 1em 2cm; font-style: italic; border-left: 3px solid #888; padding-left: 1em; }
+  code, .code { font-family: Consolas, "Courier New", monospace; font-size: 10pt; }
+  pre {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 9pt;
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    padding: 0.8em;
+    overflow-x: auto;
+    line-height: 1.35;
+    text-align: left;
+  }
+  .epigraphe { width: 60%; margin: 2cm 0 2cm auto; font-style: italic; text-align: right; text-indent: 0; }
+  @media print {
+    body { padding: 0; max-width: none; }
+    .figure-slot { background: #fff; }
+    a { color: #000; text-decoration: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- PAGE DE GARDE -->
+<!-- ============================================================ -->
+<div class="cover">
+  <div>
+    <p class="uni">[NOM DE L'UNIVERSITÉ / INSTITUT]</p>
+    <p class="no-indent">[Faculté / Département d'Informatique]</p>
+    <p class="no-indent small">République Démocratique du Congo</p>
+    <p class="no-indent" style="margin-top:1.5em;">
+      <!-- [FIGURE 0.1 — Emplacement : logo de l'institution] -->
+      <span style="display:inline-block;border:1px dashed #999;padding:1.2cm 2cm;color:#666;">[LOGO INSTITUTION]</span>
+    </p>
+  </div>
+
+  <div class="title-box">
+    <p class="no-indent small" style="margin-bottom:1em;">MÉMOIRE DE FIN D'ÉTUDES</p>
+    <h1 class="no-break">Conception et réalisation d'une application web de gestion des rendez-vous et des activités professionnelles : cas du système PLANIPRO</h1>
+    <p class="no-indent" style="margin-top:1.2em;"><em>Présenté en vue de l'obtention du grade de [Licence / Graduat] en Informatique</em></p>
+    <p class="no-indent small">Option : [Génie Logiciel / Systèmes d'information]</p>
+  </div>
+
+  <div>
+    <p class="no-indent"><strong>Présenté et défendu par :</strong><br>[NOM COMPLET DE L'ÉTUDIANT(E)]</p>
+    <p class="no-indent" style="margin-top:1em;"><strong>Sous la direction de :</strong><br>[NOM DU PROMOTEUR / DIRECTEUR DE MÉMOIRE]<br><span class="small">[Grade académique]</span></p>
+    <p class="no-indent" style="margin-top:1.5em;"><strong>Année académique :</strong> 2024 – 2025</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ÉPIGRAPHE / DÉDICACE -->
+<!-- ============================================================ -->
+<div class="dedication">
+  <p class="epigraphe">
+    « La technologie n'est rien. Ce qui est important, c'est que vous ayez foi en les gens,
+    que ceux-ci soient fondamentalement bons et intelligents, et si vous leur donnez des outils,
+    ils feront des choses merveilleuses avec. »
+    <br><br>— Steve Jobs
+  </p>
+</div>
+
+<div class="page-break">
+  <h1 class="no-break" style="border:none;text-align:center;">DÉDICACE</h1>
+  <p>À Dieu Tout-Puissant, source de toute sagesse et de toute intelligence.</p>
+  <p>À mes parents, pour leur amour inconditionnel, leurs sacrifices et leur soutien indéfectible tout au long de mon parcours académique.</p>
+  <p>À mes frères et sœurs, pour leur encouragement permanent.</p>
+  <p>À tous ceux qui, de près ou de loin, ont contribué à la réalisation de ce travail.</p>
+  <p class="center" style="margin-top:2em;"><strong>[Prénom de l'auteur]</strong></p>
+</div>
+
+<div class="page-break">
+  <h1 class="no-break" style="border:none;">REMERCIEMENTS</h1>
+  <p>Au terme de ce travail de fin d'études, nous tenons à exprimer notre profonde gratitude à toutes les personnes qui ont contribué, de manière directe ou indirecte, à son aboutissement.</p>
+  <p>Nos remerciements s'adressent en premier lieu à notre promoteur, <strong>[Nom du promoteur]</strong>, pour la qualité de son encadrement scientifique, sa disponibilité, ses conseils méthodologiques et la rigueur qu'il a su nous transmettre tout au long de cette recherche.</p>
+  <p>Nous remercions également le corps professoral de <strong>[Nom de l'institution]</strong>, dont les enseignements ont constitué le socle théorique et pratique de notre formation en informatique.</p>
+  <p>Nos remerciements vont aussi aux professionnels et responsables d'entreprises qui ont accepté de partager leur expérience concernant la gestion des rendez-vous et des activités, alimentant ainsi l'analyse de l'existant présentée dans ce mémoire.</p>
+  <p>Nous n'oublions pas nos camarades de promotion, pour les échanges enrichissants et l'esprit de collaboration qui ont marqué ces années d'études.</p>
+  <p>Enfin, nous adressons un merci particulier à notre famille pour son soutien moral et matériel constant.</p>
+  <p>Que tous ceux dont le nom n'apparaît pas ici trouvent ici l'expression de notre reconnaissance.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- RÉSUMÉ / ABSTRACT -->
+<!-- ============================================================ -->
+<div class="page-break">
+  <h1 class="no-break" style="border:none;">RÉSUMÉ</h1>
+  <div class="abstract-box">
+    <p>La digitalisation des processus organisationnels constitue aujourd'hui un enjeu majeur pour les entreprises, qu'elles soient de taille moyenne ou en croissance. Parmi ces processus, la gestion des rendez-vous professionnels, le suivi des activités internes et la communication avec les clients, partenaires et visiteurs occupent une place centrale. Or, dans de nombreuses structures, ces tâches restent encore traitées de manière fragmentée : agendas papier, tableurs dispersés, échanges téléphoniques non tracés, messagerie personnelle non institutionnelle.</p>
+    <p>Ce mémoire présente la conception et la réalisation de <strong>PLANIPRO</strong>, une application web destinée à centraliser la planification des rendez-vous, l'organisation des activités, la gestion des contacts (clients, partenaires, visiteurs), la messagerie intégrée, le calendrier interactif, les notifications et les rapports. Le système s'appuie sur une architecture PHP / MySQL / Apache (environnement XAMPP), une authentification multi-rôles (entreprise, visiteur, client, partenaire) et une interface web responsive.</p>
+    <p>La démarche méthodologique combine une revue de littérature sur les systèmes d'information, le génie logiciel et la gestion de projet ; une étude de l'existant ; une analyse des besoins ; une conception (modèle de données, acteurs, cas d'utilisation, architecture) ; puis une implémentation et des tests fonctionnels.</p>
+    <p><strong>Mots-clés :</strong> système d'information, gestion des rendez-vous, activités professionnelles, application web, PHP, MySQL, planification, messagerie, calendrier, génie logiciel.</p>
+  </div>
+
+  <h2>ABSTRACT</h2>
+  <div class="abstract-box">
+    <p>The digitalization of organizational processes is a major challenge for modern enterprises. Among these processes, professional appointment management, internal activity tracking and communication with clients, partners and visitors play a central role. In many organizations, these tasks are still handled in a fragmented way: paper agendas, scattered spreadsheets, untracked phone calls and personal messaging tools.</p>
+    <p>This thesis presents the design and implementation of <strong>PLANIPRO</strong>, a web application that centralizes appointment scheduling, activity organization, contact management (clients, partners, visitors), integrated messaging, interactive calendar, notifications and reporting. The system is built on a PHP / MySQL / Apache stack (XAMPP), multi-role authentication (company, visitor, client, partner) and a responsive web interface.</p>
+    <p>The methodological approach combines a literature review on information systems, software engineering and project management; an analysis of the existing situation; requirements analysis; system design (data model, actors, use cases, architecture); and finally implementation with functional testing.</p>
+    <p><strong>Keywords:</strong> information system, appointment management, professional activities, web application, PHP, MySQL, planning, messaging, calendar, software engineering.</p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- LISTES -->
+<!-- ============================================================ -->
+<div class="page-break">
+  <h1 class="no-break" style="border:none;">TABLE DES MATIÈRES</h1>
+  <ul class="toc" style="list-style:none;margin-left:0;">
+    <li class="ch">INTRODUCTION GÉNÉRALE ................................................................. 1</li>
+    <li>0.1 Contexte et justification .............................................................................. 1</li>
+    <li>0.2 Problématique ............................................................................................. 3</li>
+    <li>0.3 Hypothèses de recherche ............................................................................. 4</li>
+    <li>0.4 Objectifs de l'étude ..................................................................................... 5</li>
+    <li>0.5 Intérêt du sujet ............................................................................................ 6</li>
+    <li>0.6 Délimitation du sujet ................................................................................... 7</li>
+    <li>0.7 Méthodologie ............................................................................................. 8</li>
+    <li>0.8 Subdivision du travail ................................................................................. 9</li>
+
+    <li class="ch">CHAPITRE I — CADRE THÉORIQUE ET CONCEPTUEL ......................... 11</li>
+    <li>1.1 Introduction du chapitre ............................................................................. 11</li>
+    <li>1.2 Les systèmes d'information ........................................................................ 12</li>
+    <li>1.3 La gestion des rendez-vous et du temps organisationnel ............................. 18</li>
+    <li>1.4 La gestion des activités et des tâches .......................................................... 22</li>
+    <li>1.5 Les applications web et architectures logicielles ......................................... 26</li>
+    <li>1.6 Bases de données relationnelles ................................................................. 32</li>
+    <li>1.7 Sécurité des applications web .................................................................... 36</li>
+    <li>1.8 Génie logiciel et méthodes de conception ................................................... 40</li>
+    <li>1.9 Concepts clés propres à PLANIPRO .......................................................... 45</li>
+    <li>1.10 Conclusion du chapitre ............................................................................. 48</li>
+
+    <li class="ch">CHAPITRE II — ÉTUDE DE L'EXISTANT ET ANALYSE DU PROBLÈME ... 49</li>
+    <li>2.1 Introduction ............................................................................................... 49</li>
+    <li>2.2 Présentation du domaine d'étude ............................................................... 50</li>
+    <li>2.3 Description de l'existant ............................................................................ 52</li>
+    <li>2.4 Analyse critique de l'existant ..................................................................... 58</li>
+    <li>2.5 Formulation du problème .......................................................................... 62</li>
+    <li>2.6 Analyse comparative des solutions existantes ............................................ 64</li>
+    <li>2.7 Besoins identifiés ...................................................................................... 68</li>
+    <li>2.8 Conclusion du chapitre .............................................................................. 71</li>
+
+    <li class="ch">CHAPITRE III — ANALYSE ET CONCEPTION DU SYSTÈME ................... 72</li>
+    <li>3.1 Introduction ............................................................................................... 72</li>
+    <li>3.2 Spécification des besoins .......................................................................... 73</li>
+    <li>3.3 Identification des acteurs ........................................................................... 78</li>
+    <li>3.4 Cas d'utilisation ......................................................................................... 80</li>
+    <li>3.5 Modélisation des processus métier ............................................................ 86</li>
+    <li>3.6 Conception de la base de données ............................................................. 90</li>
+    <li>3.7 Architecture technique .............................................................................. 98</li>
+    <li>3.8 Conception des interfaces ........................................................................ 102</li>
+    <li>3.9 Sécurité et règles de gestion .................................................................... 105</li>
+    <li>3.10 Conclusion du chapitre .......................................................................... 108</li>
+
+    <li class="ch">CHAPITRE IV — IMPLÉMENTATION DU SYSTÈME PROPOSÉ ............... 109</li>
+    <li>4.1 Introduction ............................................................................................. 109</li>
+    <li>4.2 Environnement de développement ........................................................... 110</li>
+    <li>4.3 Organisation du code source .................................................................... 113</li>
+    <li>4.4 Implémentation de l'authentification ........................................................ 116</li>
+    <li>4.5 Modules métier ........................................................................................ 120</li>
+    <li>4.6 Interfaces utilisateur réalisées .................................................................. 128</li>
+    <li>4.7 Tests et validation ................................................................................... 132</li>
+    <li>4.8 Difficultés rencontrées et solutions .......................................................... 136</li>
+    <li>4.9 Limites et perspectives ............................................................................ 138</li>
+    <li>4.10 Conclusion du chapitre .......................................................................... 140</li>
+
+    <li class="ch">CONCLUSION GÉNÉRALE ET PERSPECTIVES ...................................... 141</li>
+    <li class="ch">BIBLIOGRAPHIE ET WEBOGRAPHIE ..................................................... 144</li>
+    <li class="ch">ANNEXES ................................................................................................... 155</li>
+  </ul>
+</div>
+
+<div class="page-break">
+  <h1 class="no-break" style="border:none;">LISTE DES FIGURES</h1>
+  <p class="no-indent small">Les figures ci-dessous sont à insérer aux emplacements indiqués dans le corps du texte (encadrés pointillés).</p>
+  <ol>
+    <li>Figure 0.1 — Logo de l'institution (page de garde)</li>
+    <li>Figure 1.1 — Pyramide des systèmes d'information (opérationnel / tactique / stratégique)</li>
+    <li>Figure 1.2 — Cycle de vie d'un système d'information</li>
+    <li>Figure 1.3 — Schéma générique d'une architecture client-serveur web à trois tiers</li>
+    <li>Figure 1.4 — Modèle MVC (Model-View-Controller)</li>
+    <li>Figure 1.5 — Cycle de vie d'un rendez-vous professionnel</li>
+    <li>Figure 1.6 — Illustration du modèle relationnel (entités, attributs, associations)</li>
+    <li>Figure 1.7 — Principales menaces et contre-mesures de sécurité web</li>
+    <li>Figure 1.8 — Processus unifié / cycle en V / approche itérative (comparaison)</li>
+    <li>Figure 2.1 — Cartographie des acteurs du domaine (entreprise, clients, partenaires, visiteurs)</li>
+    <li>Figure 2.2 — Processus actuel de prise de rendez-vous (as-is)</li>
+    <li>Figure 2.3 — Diagramme d'Ishikawa des causes de dysfonctionnement</li>
+    <li>Figure 2.4 — Matrice SWOT de l'existant</li>
+    <li>Figure 2.5 — Comparaison visuelle des outils existants (Calendly, Google Calendar, Excel…)</li>
+    <li>Figure 3.1 — Diagramme des cas d'utilisation global de PLANIPRO</li>
+    <li>Figure 3.2 — Cas d'utilisation — module Rendez-vous</li>
+    <li>Figure 3.3 — Cas d'utilisation — module Activités</li>
+    <li>Figure 3.4 — Diagramme de séquence : demande et validation d'un RDV</li>
+    <li>Figure 3.5 — Diagramme d'activités : contact public → création de compte visiteur</li>
+    <li>Figure 3.6 — Modèle conceptuel de données (MCD / diagramme entité-association)</li>
+    <li>Figure 3.7 — Modèle logique de données (MLD)</li>
+    <li>Figure 3.8 — Diagramme de classes UML simplifié</li>
+    <li>Figure 3.9 — Architecture technique de PLANIPRO</li>
+    <li>Figure 3.10 — Maquette de la page d'accueil publique</li>
+    <li>Figure 3.11 — Maquette du tableau de bord entreprise</li>
+    <li>Figure 3.12 — Maquette du calendrier interactif</li>
+    <li>Figure 3.13 — Maquette de la messagerie</li>
+    <li>Figure 4.1 — Capture d'écran : page d'accueil PLANIPRO</li>
+    <li>Figure 4.2 — Capture d'écran : inscription entreprise</li>
+    <li>Figure 4.3 — Capture d'écran : connexion</li>
+    <li>Figure 4.4 — Capture d'écran : tableau de bord entreprise</li>
+    <li>Figure 4.5 — Capture d'écran : gestion des rendez-vous</li>
+    <li>Figure 4.6 — Capture d'écran : formulaire d'ajout d'activité</li>
+    <li>Figure 4.7 — Capture d'écran : calendrier (vue mois)</li>
+    <li>Figure 4.8 — Capture d'écran : messagerie</li>
+    <li>Figure 4.9 — Capture d'écran : rapports / export PDF</li>
+    <li>Figure 4.10 — Capture d'écran : espace client</li>
+    <li>Figure 4.11 — Capture d'écran : notifications publiques</li>
+    <li>Figure 4.12 — Schéma de déploiement local (XAMPP)</li>
+  </ol>
+</div>
+
+<div class="page-break">
+  <h1 class="no-break" style="border:none;">LISTE DES TABLEAUX</h1>
+  <ol>
+    <li>Tableau 1.1 — Comparaison des types de systèmes d'information</li>
+    <li>Tableau 1.2 — Principales technologies web côté serveur</li>
+    <li>Tableau 1.3 — Synthèse des concepts théoriques mobilisés</li>
+    <li>Tableau 2.1 — Inventaire des pratiques actuelles de planification</li>
+    <li>Tableau 2.2 — Analyse des forces et faiblesses de l'existant</li>
+    <li>Tableau 2.3 — Comparaison fonctionnelle des solutions du marché</li>
+    <li>Tableau 2.4 — Besoins fonctionnels prioritaires</li>
+    <li>Tableau 2.5 — Besoins non fonctionnels</li>
+    <li>Tableau 3.1 — Acteurs du système PLANIPRO</li>
+    <li>Tableau 3.2 — Matrice des droits d'accès</li>
+    <li>Tableau 3.3 — Dictionnaire de données (extrait)</li>
+    <li>Tableau 3.4 — Catalogue des relations et cardinalités</li>
+    <li>Tableau 3.5 — Règles de gestion métier</li>
+    <li>Tableau 4.1 — Environnement logiciel utilisé</li>
+    <li>Tableau 4.2 — Structure des répertoires du projet</li>
+    <li>Tableau 4.3 — Scénarios de test et résultats</li>
+    <li>Tableau 4.4 — Couverture fonctionnelle réalisée</li>
+  </ol>
+</div>
+
+<div class="page-break">
+  <h1 class="no-break" style="border:none;">LISTE DES ABRÉVIATIONS ET SIGLES</h1>
+  <table>
+    <tr><th>Sigle</th><th>Signification</th></tr>
+    <tr><td>API</td><td>Application Programming Interface</td></tr>
+    <tr><td>CGI</td><td>Common Gateway Interface</td></tr>
+    <tr><td>CRUD</td><td>Create, Read, Update, Delete</td></tr>
+    <tr><td>CSRF</td><td>Cross-Site Request Forgery</td></tr>
+    <tr><td>CSS</td><td>Cascading Style Sheets</td></tr>
+    <tr><td>HTML</td><td>HyperText Markup Language</td></tr>
+    <tr><td>HTTP</td><td>HyperText Transfer Protocol</td></tr>
+    <tr><td>IDE</td><td>Integrated Development Environment</td></tr>
+    <tr><td>MCD</td><td>Modèle Conceptuel de Données</td></tr>
+    <tr><td>MLD</td><td>Modèle Logique de Données</td></tr>
+    <tr><td>MPD</td><td>Modèle Physique de Données</td></tr>
+    <tr><td>MVC</td><td>Model-View-Controller</td></tr>
+    <tr><td>MySQL</td><td>My Structured Query Language</td></tr>
+    <tr><td>PDO</td><td>PHP Data Objects</td></tr>
+    <tr><td>PDF</td><td>Portable Document Format</td></tr>
+    <tr><td>PHP</td><td>PHP: Hypertext Preprocessor</td></tr>
+    <tr><td>PRG</td><td>Post-Redirect-Get</td></tr>
+    <tr><td>RDV</td><td>Rendez-vous</td></tr>
+    <tr><td>SGBD</td><td>Système de Gestion de Bases de Données</td></tr>
+    <tr><td>SI</td><td>Système d'Information</td></tr>
+    <tr><td>SQL</td><td>Structured Query Language</td></tr>
+    <tr><td>SSL/TLS</td><td>Secure Sockets Layer / Transport Layer Security</td></tr>
+    <tr><td>TIC</td><td>Technologies de l'Information et de la Communication</td></tr>
+    <tr><td>UML</td><td>Unified Modeling Language</td></tr>
+    <tr><td>URL</td><td>Uniform Resource Locator</td></tr>
+    <tr><td>XSS</td><td>Cross-Site Scripting</td></tr>
+    <tr><td>XAMPP</td><td>Apache, MariaDB/MySQL, PHP, Perl (pack)</td></tr>
+  </table>
+</div>
+
+<!-- ============================================================ -->
+<!-- INTRODUCTION GÉNÉRALE -->
+<!-- ============================================================ -->
+<h1>INTRODUCTION GÉNÉRALE</h1>
+
+<h2>0.1 Contexte et justification</h2>
+
+<p>Depuis plus de trois décennies, les Technologies de l'Information et de la Communication (TIC) ont profondément transformé le fonctionnement des organisations. La mondialisation des échanges, l'accélération des cycles économiques et l'exigence croissante de réactivité ont placé l'information au cœur de la compétitivité (Laudon &amp; Laudon, 2020 ; Reix et al., 2016). Dans ce contexte, la capacité d'une entreprise à planifier, coordonner et suivre ses interactions professionnelles — rendez-vous, activités, échanges avec les clients et partenaires — devient un facteur critique de performance.</p>
+
+<p>La planification n'est plus une simple activité administrative : elle constitue un processus stratégique qui conditionne la qualité de service, la productivité des équipes et la satisfaction des parties prenantes (Mintzberg, 1994 ; Drucker, 2006). Or, de nombreuses organisations, en particulier les petites et moyennes entreprises (PME) des économies émergentes, continuent de s'appuyer sur des outils disparates : agendas papier, tableurs Excel, appels téléphoniques, messages WhatsApp ou e-mails personnels. Ces pratiques, bien que familières, génèrent des pertes d'information, des doubles réservations, des oublis de suivi et une absence de traçabilité (Davenport, 1993 ; Hammer &amp; Champy, 2003).</p>
+
+<p>Parallèlement, le développement du web a démocratisé l'accès à des applications métier accessibles depuis un simple navigateur. Les architectures client-serveur à trois niveaux, les frameworks PHP, les bases de données relationnelles MySQL/MariaDB et les interfaces riches (JavaScript, CSS) permettent aujourd'hui de concevoir, à moindre coût, des systèmes d'information adaptés aux besoins locaux (Welling &amp; Thomson, 2016 ; Nixon, 2021). C'est dans cette dynamique que s'inscrit le présent travail : la conception et la réalisation de <strong>PLANIPRO</strong>, une plateforme web de gestion des rendez-vous et des activités professionnelles.</p>
+
+<p>PLANIPRO vise à offrir à une entreprise un espace unique où elle peut : recevoir et valider des demandes de rendez-vous ; organiser les activités internes avec priorités, échéances et progression ; gérer ses contacts (clients, partenaires, visiteurs) ; communiquer via une messagerie intégrée ; visualiser le planning dans un calendrier ; suivre les notifications et produire des rapports. Le système distingue plusieurs rôles — entreprise, visiteur (employé/contact opérationnel), client et partenaire — afin de respecter les responsabilités et la confidentialité des données.</p>
+
+<p>Le choix de ce sujet se justifie à plusieurs niveaux. Sur le plan social et économique, l'amélioration de la planification contribue à la professionnalisation des entreprises et à la réduction des coûts liés aux rendez-vous manqués ou mal préparés (McKinsey Global Institute, 2016). Sur le plan scientifique et technique, le projet mobilise des connaissances en systèmes d'information, en génie logiciel, en bases de données et en sécurité web. Sur le plan pédagogique, il constitue une synthèse concrète des enseignements reçus au cours du cursus.</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 0.2 ]</div>
+  <span class="fig-hint">À insérer : schéma illustrant le contexte — fragmentation des outils actuels (agenda, Excel, téléphone, WhatsApp) versus plateforme centralisée PLANIPRO.</span>
+  <div class="fig-caption">Figure 0.2 — Du chaos informationnel à la plateforme intégrée PLANIPRO</div>
+</div>
+
+<h2>0.2 Problématique</h2>
+
+<p>Malgré la disponibilité d'outils numériques grand public (Google Calendar, Calendly, Microsoft Outlook, etc.), de nombreuses entreprises peinent encore à disposer d'une solution adaptée à leur réalité opérationnelle : multi-acteurs (entreprise, clients, partenaires, visiteurs), validation formelle des rendez-vous, suivi des activités assignées, messagerie liée au contexte métier, rapports de synthèse et isolation des données par organisation. Les outils généralistes couvrent souvent partiellement ces besoins, ou imposent des modèles tarifaires et des contraintes d'intégration peu adaptés aux PME locales (Gartner, 2022).</p>
+
+<p>Dès lors, la question centrale de cette recherche peut être formulée ainsi :</p>
+
+<blockquote>
+  <strong>Comment concevoir et réaliser une application web permettant à une entreprise de centraliser la gestion de ses rendez-vous, de ses activités professionnelles et de ses échanges avec les clients, partenaires et visiteurs, tout en garantissant la traçabilité, la sécurité et la simplicité d'usage ?</strong>
+</blockquote>
+
+<p>Cette problématique se décline en questions secondaires :</p>
+<ol>
+  <li>Quels sont les fondements théoriques de la gestion de la planification et des systèmes d'information web ?</li>
+  <li>Quelles sont les limites des pratiques et outils actuellement utilisés dans le domaine étudié ?</li>
+  <li>Quels besoins fonctionnels et non fonctionnels doit satisfaire une solution adaptée ?</li>
+  <li>Quelle architecture, quel modèle de données et quelles interfaces permettent de répondre à ces besoins ?</li>
+  <li>Comment implémenter concrètement cette solution et valider son fonctionnement ?</li>
+</ol>
+
+<h2>0.3 Hypothèses de recherche</h2>
+
+<p>En réponse à la problématique, nous formulons les hypothèses suivantes :</p>
+
+<p><strong>Hypothèse principale (H0) :</strong> La mise en place d'une application web multi-rôles, fondée sur une base de données relationnelle et une interface claire, améliore significativement la coordination des rendez-vous et des activités professionnelles par rapport aux pratiques manuelles ou fragmentées.</p>
+
+<p><strong>Hypothèses secondaires :</strong></p>
+<ul>
+  <li><strong>H1 :</strong> La formalisation du cycle de vie des rendez-vous (en attente, accepté, refusé, reporté, annulé, terminé) réduit les ambiguïtés et les conflits de planning.</li>
+  <li><strong>H2 :</strong> L'affectation des activités avec priorités, échéances et taux de progression renforce le suivi opérationnel au sein de l'entreprise.</li>
+  <li><strong>H3 :</strong> L'intégration de la messagerie et des notifications diminue les pertes d'information entre l'entreprise et ses interlocuteurs.</li>
+  <li><strong>H4 :</strong> Une authentification sécurisée et une isolation des données par entreprise assurent la confidentialité nécessaire à un usage professionnel.</li>
+</ul>
+
+<h2>0.4 Objectifs de l'étude</h2>
+
+<h3>0.4.1 Objectif général</h3>
+<p>Concevoir et réaliser une application web, dénommée PLANIPRO, permettant la gestion intégrée des rendez-vous et des activités professionnelles pour les entreprises et leurs interlocuteurs (clients, partenaires, visiteurs).</p>
+
+<h3>0.4.2 Objectifs spécifiques</h3>
+<ul>
+  <li>Élaborer un cadre théorique et conceptuel relatif aux systèmes d'information, à la planification et aux technologies web.</li>
+  <li>Diagnostiquer l'existant et identifier les dysfonctionnements liés à la gestion actuelle des rendez-vous et activités.</li>
+  <li>Spécifier les besoins fonctionnels et non fonctionnels du système cible.</li>
+  <li>Modéliser le système (acteurs, cas d'utilisation, processus, base de données, architecture).</li>
+  <li>Implémenter les modules principaux : authentification, rendez-vous, activités, calendrier, contacts, messagerie, notifications, rapports.</li>
+  <li>Tester et valider le fonctionnement du prototype.</li>
+</ul>
+
+<h2>0.5 Intérêt du sujet</h2>
+
+<p><strong>Intérêt scientifique :</strong> le travail contribue à la réflexion sur la conception de systèmes d'information métier pour PME, en articulant théorie (SI, génie logiciel, bases de données) et pratique (prototypage web).</p>
+
+<p><strong>Intérêt pratique :</strong> PLANIPRO propose un outil opérationnel susceptible d'être déployé en environnement local (XAMPP) ou adapté à un serveur d'hébergement, au service des entreprises souhaitant professionnaliser leur planning.</p>
+
+<p><strong>Intérêt pédagogique :</strong> le mémoire mobilise l'analyse, la conception UML/Merise, le développement PHP/MySQL, la sécurité applicative et la documentation technique — compétences essentielles du profil d'informaticien.</p>
+
+<p><strong>Intérêt social :</strong> en facilitant l'accès à un outil de planification, le projet s'inscrit dans la dynamique d'inclusion numérique et de modernisation des organisations (ITU, 2023 ; Banque mondiale, 2021).</p>
+
+<h2>0.6 Délimitation du sujet</h2>
+
+<p>Le présent travail se limite à :</p>
+<ul>
+  <li>la conception et la réalisation d'une application web (pas d'application mobile native) ;</li>
+  <li>un périmètre fonctionnel centré sur les rendez-vous, activités, contacts, messagerie, calendrier, notifications et rapports ;</li>
+  <li>un déploiement de démonstration en environnement local XAMPP (Apache, MySQL, PHP 8+) ;</li>
+  <li>quatre rôles utilisateurs principaux : entreprise, visiteur (<span class="code">employe</span>), client, partenaire, plus l'accès public (contact sans compte).</li>
+</ul>
+<p>Ne sont pas couverts dans cette version : la facturation, la visioconférence intégrée, les notifications e-mail SMTP avancées, une API REST publique complète, ni le multi-tenant SaaS commercial à grande échelle. Ces éléments sont évoqués comme perspectives.</p>
+
+<h2>0.7 Méthodologie</h2>
+
+<p>Notre démarche s'inspire des approches classiques du génie logiciel et de l'analyse des systèmes d'information (Sommerville, 2015 ; Pressman &amp; Maxim, 2019 ; Tardieu et al., 2000) :</p>
+<ol>
+  <li><strong>Recherche documentaire :</strong> ouvrages, articles, normes et documentation technique (PHP, MySQL, UML, sécurité OWASP).</li>
+  <li><strong>Observation et analyse de l'existant :</strong> pratiques de planification, outils utilisés, points de friction.</li>
+  <li><strong>Recueil des besoins :</strong> identification des acteurs, des cas d'utilisation et des contraintes.</li>
+  <li><strong>Conception :</strong> modélisation des données (Merise / UML), architecture applicative, maquettes d'interface.</li>
+  <li><strong>Implémentation :</strong> développement itératif des modules, tests unitaires et scénarios fonctionnels.</li>
+  <li><strong>Validation :</strong> vérification de la conformité aux besoins et correction des anomalies.</li>
+</ol>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 0.3 ]</div>
+  <span class="fig-hint">À insérer : schéma de la démarche méthodologique (6 étapes en cycle ou en V).</span>
+  <div class="fig-caption">Figure 0.3 — Démarche méthodologique du mémoire</div>
+</div>
+
+<h2>0.8 Subdivision du travail</h2>
+
+<p>Outre la présente introduction et la conclusion générale, le mémoire s'organise en quatre chapitres :</p>
+<ul>
+  <li><strong>Chapitre I — Cadre théorique et conceptuel :</strong> fondements sur les SI, la planification, le web, les bases de données, la sécurité et le génie logiciel.</li>
+  <li><strong>Chapitre II — Étude de l'existant et analyse du problème :</strong> diagnostic des pratiques actuelles, limites, comparaison des solutions, besoins.</li>
+  <li><strong>Chapitre III — Analyse et conception du système :</strong> spécifications, acteurs, cas d'utilisation, modèle de données, architecture, interfaces.</li>
+  <li><strong>Chapitre IV — Implémentation du système proposé :</strong> environnement, code, modules, captures d'écran, tests, limites et perspectives.</li>
+</ul>
+<p>Une bibliographie abondante et des annexes (schéma SQL, guides d'utilisation, captures complémentaires) complètent le document.</p>
+
+<h2>0.9 Clarification épistémologique et positionnement</h2>
+<p>Sur le plan épistémologique, ce mémoire s'inscrit dans une posture pragmatique et constructiviste appliquée : l'objectif n'est pas uniquement de décrire la réalité (positivisme pur), mais de construire un artefact utile évalué dans un contexte d'usage (Hevner et al., 2004 ; Baskerville &amp; Myers, 2002). La validité recherchée est donc une validité utilitaire et une cohérence interne conception–implémentation, plutôt qu'une généralisation statistique large.</p>
+<p>Le terrain d'application — PME et organisations de services — justifie des choix de simplicité technologique. Nous reconnaissons les limites de transfert : un hôpital, une université ou une administration publique pourraient exiger des modules supplémentaires (files d'attente, conformité réglementaire renforcée, interopérabilité HL7/LDAP, etc.). PLANIPRO constitue néanmoins un noyau réutilisable et extensible.</p>
+
+
+<p class="center" style="margin-top:2em;"><em>*** Fin de l'introduction générale ***</em></p>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE I -->
+<!-- ============================================================ -->
+<h1>CHAPITRE I — CADRE THÉORIQUE ET CONCEPTUEL</h1>
+
+<h2>1.1 Introduction du chapitre</h2>
+
+<p>Tout travail de conception d'un système d'information s'ancre dans un corpus théorique qui permet de comprendre les enjeux, de choisir les bons concepts et d'éviter les approximations. Ce premier chapitre a pour objectif de clarifier les notions fondamentales mobilisées dans la réalisation de PLANIPRO : systèmes d'information, gestion du temps et des rendez-vous, gestion des activités, architectures web, bases de données relationnelles, sécurité applicative et méthodes de génie logiciel (Reix et al., 2016 ; Laudon &amp; Laudon, 2020 ; Sommerville, 2015).</p>
+
+<p>Nous procédons du plus général au plus spécifique, afin de construire progressivement le cadre conceptuel dans lequel s'inscrit notre application.</p>
+
+<h2>1.2 Les systèmes d'information</h2>
+
+<h3>1.2.1 Définition</h3>
+
+<p>Un système d'information (SI) peut être défini comme un ensemble organisé de ressources (humaines, matérielles, logicielles, données et procédures) permettant d'acquérir, de traiter, de stocker et de diffuser de l'information au sein d'une organisation (Reix, 2004 ; Davis &amp; Olson, 1985). Pour Alter (2008), le SI est avant tout un système de travail : il soutient les activités des acteurs plutôt que de se réduire à une infrastructure technique.</p>
+
+<p>Le SI ne se confond ni avec le système informatique (composante technique), ni avec le système d'organisation (règles, structure, culture). Il se situe à leur intersection : il formalise les flux d'information nécessaires à la décision et à l'action (Le Moigne, 1990 ; Morley et al., 2011).</p>
+
+<h3>1.2.2 Rôles et niveaux du SI</h3>
+
+<p>Classiquement, on distingue trois niveaux d'usage du SI (Anthony, 1965 ; Laudon &amp; Laudon, 2020) :</p>
+<ul>
+  <li><strong>Niveau opérationnel :</strong> traitement des transactions quotidiennes (saisie d'un rendez-vous, mise à jour d'une activité, envoi d'un message).</li>
+  <li><strong>Niveau tactique (management) :</strong> contrôle, reporting, suivi des indicateurs (taux de RDV acceptés, activités en retard).</li>
+  <li><strong>Niveau stratégique :</strong> aide à la décision de long terme (évolution de la charge, satisfaction clients, partenariats).</li>
+</ul>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 1.1 ]</div>
+  <span class="fig-hint">À dessiner : pyramide à 3 niveaux — Opérationnel (base) / Tactique (milieu) / Stratégique (sommet), avec flèches « données » montantes et « décisions » descendantes. Indiquer où se situe PLANIPRO (surtout opérationnel + tactique).</span>
+  <div class="fig-caption">Figure 1.1 — Pyramide des systèmes d'information et positionnement de PLANIPRO</div>
+</div>
+
+<p class="table-caption">Tableau 1.1 — Comparaison des types de systèmes d'information (adapté de Laudon &amp; Laudon, 2020)</p>
+<table>
+  <tr><th>Type</th><th>Finalité</th><th>Exemple</th><th>Lien avec PLANIPRO</th></tr>
+  <tr><td>TPS (Transaction Processing)</td><td>Enregistrer les opérations</td><td>Caisse, réservation</td><td>Création / validation RDV</td></tr>
+  <tr><td>MIS (Management Information)</td><td>Rapports de gestion</td><td>Tableaux de bord</td><td>Module rapports</td></tr>
+  <tr><td>DSS (Decision Support)</td><td>Aide à la décision</td><td>Simulation</td><td>Perspectives futures</td></tr>
+  <tr><td>CRM</td><td>Relation client</td><td>Salesforce</td><td>Contacts clients / partenaires</td></tr>
+  <tr><td>Workflow / collab.</td><td>Coordination</td><td>Slack, Asana</td><td>Activités + messagerie</td></tr>
+</table>
+
+<h3>1.2.3 Cycle de vie d'un SI</h3>
+
+<p>Le développement d'un SI suit généralement un cycle comprenant : étude préalable, analyse, conception, réalisation, mise en service, maintenance et évolution (Tardieu et al., 2000 ; Avison &amp; Fitzgerald, 2006). Les approches modernes insistent sur l'itération et le feedback utilisateur (Beck et al., 2001 ; Schwaber &amp; Sutherland, 2020).</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 1.2 ]</div>
+  <span class="fig-hint">À dessiner : cycle de vie SI (besoin → analyse → conception → réalisation → tests → déploiement → maintenance), avec une boucle de retour.</span>
+  <div class="fig-caption">Figure 1.2 — Cycle de vie d'un système d'information</div>
+</div>
+
+<h3>1.2.4 Qualité de l'information</h3>
+
+<p>La valeur d'un SI dépend de la qualité de l'information qu'il véhicule. Wang et Strong (1996) distinguent plusieurs dimensions : exactitude, complétude, cohérence, actualité, accessibilité et crédibilité. Dans le cas de la planification, une information erronée sur un créneau (doublon, oubli de report) peut entraîner un coût organisationnel élevé (manque à gagner, insatisfaction client).</p>
+
+<h2>1.3 La gestion des rendez-vous et du temps organisationnel</h2>
+
+<h3>1.3.1 Le temps comme ressource</h3>
+
+<p>Le temps est une ressource rare et non stockable (Drucker, 2006). La gestion du temps organisationnel (time management) vise à allouer les créneaux disponibles aux activités à plus forte valeur ajoutée (Covey, 2004 ; Allen, 2015). Dans les entreprises de services, le rendez-vous est l'unité élémentaire de la relation avec le client ou le partenaire.</p>
+
+<h3>1.3.2 Définition du rendez-vous professionnel</h3>
+
+<p>Un rendez-vous professionnel peut être défini comme un engagement mutuel entre au moins deux parties pour se rencontrer (physiquement ou à distance) à une date, une heure et éventuellement un lieu déterminés, afin de traiter un objet précis (négociation, suivi, conseil, collaboration). Sur le plan informationnel, un RDV se caractérise par : un demandeur, un destinataire (souvent l'entreprise), un créneau (début/fin), un statut, un motif et parfois un lieu (O'Brien &amp; Marakas, 2011).</p>
+
+<h3>1.3.3 Cycle de vie d'un rendez-vous</h3>
+
+<p>Dans les systèmes de réservation et de scheduling, le cycle de vie typique comprend les états : demandé / en attente, confirmé, reporté, annulé, réalisé (Pinedo, 2016). PLANIPRO adopte un cycle proche : <em>en_attente</em>, <em>accepte</em>, <em>refuse</em>, <em>reporte</em>, <em>annule</em>, <em>termine</em>.</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 1.5 ]</div>
+  <span class="fig-hint">À dessiner : automate à états — en_attente → accepte → termine ; depuis en_attente : refuse / annule ; depuis accepte : reporte (puis reconfirmation) / annule / termine. Utiliser des flèches nommées.</span>
+  <div class="fig-caption">Figure 1.5 — Cycle de vie d'un rendez-vous dans PLANIPRO</div>
+</div>
+
+<h3>1.3.4 Enjeux de la planification assistée par ordinateur</h3>
+
+<p>Les systèmes de scheduling informatisés réduisent les erreurs humaines, accélèrent la confirmation et offrent une vision consolidée du planning (Burke et al., 2004). Ils soulèvent toutefois des défis : gestion des conflits de créneaux, fuseaux horaires, rappels, droits d'accès multi-utilisateurs et intégration avec d'autres canaux de communication (e-mail, SMS, messagerie instantanée) (Gartner, 2022 ; Forrester, 2021).</p>
+
+<h2>1.4 La gestion des activités et des tâches</h2>
+
+<h3>1.4.1 Activité, tâche, projet</h3>
+
+<p>En management, une <strong>tâche</strong> est une unité de travail élémentaire ; une <strong>activité</strong> peut regrouper plusieurs tâches ; un <strong>projet</strong> est un ensemble temporaire d'activités visant un objectif unique (PMI, 2021 ; Kerzner, 2017). Dans PLANIPRO, le terme « activité » désigne une unité de travail interne à l'entreprise, assignable à un visiteur, munie d'une priorité, d'un statut, d'une échéance et d'un taux de progression.</p>
+
+<h3>1.4.2 Priorisation</h3>
+
+<p>Les matrices de priorisation (Eisenhower, valeur/urgence) aident à classer les activités (Covey, 2004). PLANIPRO propose quatre niveaux : basse, moyenne, haute, urgente — suffisamment granulaires pour un usage PME, sans complexifier l'interface.</p>
+
+<h3>1.4.3 Suivi de progression</h3>
+
+<p>Le suivi de l'avancement (0–100 %) et des statuts (à faire, en cours, terminée, annulée) s'inspire des pratiques Kanban et du management visuel (Anderson, 2010 ; Kniberg, 2011). L'objectif n'est pas d'imposer une méthodologie Agile complète, mais d'offrir une visibilité minimale indispensable au pilotage.</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 1.5bis ]</div>
+  <span class="fig-hint">À insérer : schéma Kanban simplifié (À faire | En cours | Terminée) appliqué aux activités PLANIPRO, avec pastilles de priorité.</span>
+  <div class="fig-caption">Figure 1.5bis — Logique de suivi des activités (inspiration Kanban)</div>
+</div>
+
+<h2>1.5 Les applications web et architectures logicielles</h2>
+
+<h3>1.5.1 Application web : définition</h3>
+
+<p>Une application web est un logiciel accessible via un navigateur, dont la logique s'exécute principalement sur un serveur distant, communiquant par le protocole HTTP/HTTPS (Conallen, 2002 ; Murugesan et al., 2001). Contrairement aux sites vitrines, les applications web gèrent des états, des sessions utilisateurs, des transactions et des règles métier complexes.</p>
+
+<h3>1.5.2 Architecture à trois tiers</h3>
+
+<p>L'architecture classique distingue (Fowler, 2002) :</p>
+<ul>
+  <li><strong>Présentation :</strong> HTML, CSS, JavaScript dans le navigateur ;</li>
+  <li><strong>Métier / application :</strong> scripts PHP (pages et actions) ;</li>
+  <li><strong>Données :</strong> SGBD MySQL/MariaDB.</li>
+</ul>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 1.3 ]</div>
+  <span class="fig-hint">À dessiner : Navigateur ↔ Apache/PHP ↔ MySQL. Annoter « Présentation », « Logique métier », « Données ». Ajouter XAMPP comme pack local.</span>
+  <div class="fig-caption">Figure 1.3 — Architecture client-serveur web à trois tiers</div>
+</div>
+
+<h3>1.5.3 Pattern MVC et variante « Page / Action »</h3>
+
+<p>Le modèle MVC (Model-View-Controller) sépare données, affichage et contrôle (Reenskaug, 1979 ; Gamma et al., 1995). Dans de nombreuses applications PHP procédurales ou semi-structurées, on observe une variante pragmatique : les <em>pages</em> affichent (Vue + lecture), les <em>actions</em> traitent les POST et redirigent (contrôleur), tandis que le modèle est incarné par la base et des helpers. PLANIPRO suit cette organisation claire, compatible avec le pattern Post-Redirect-Get (PRG) qui évite les doubles soumissions (Resig, 2006).</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 1.4 ]</div>
+  <span class="fig-hint">À dessiner : schéma MVC classique + schéma parallèle « pages / actions / SQL » tel qu'utilisé dans PLANIPRO.</span>
+  <div class="fig-caption">Figure 1.4 — Modèle MVC et organisation pages/actions de PLANIPRO</div>
+</div>
+
+<h3>1.5.4 Technologies côté serveur</h3>
+
+<p class="table-caption">Tableau 1.2 — Principales technologies web côté serveur (synthèse)</p>
+<table>
+  <tr><th>Technologie</th><th>Caractéristiques</th><th>Pertinence pour le projet</th></tr>
+  <tr><td>PHP</td><td>Large diffusion, hébergement économique, richesse d'écosystème</td><td>Choisi (PHP 8+)</td></tr>
+  <tr><td>Java (Spring)</td><td>Robuste, entreprise</td><td>Plus lourd pour un TFC/PME</td></tr>
+  <tr><td>Python (Django/Flask)</td><td>Productif, lisible</td><td>Alternative viable</td></tr>
+  <tr><td>Node.js</td><td>Temps réel, JS full-stack</td><td>Utile pour websockets</td></tr>
+  <tr><td>ASP.NET</td><td>Écosystème Microsoft</td><td>Licence / contexte</td></tr>
+</table>
+
+<p>Le choix de PHP s'explique par sa disponibilité sur XAMPP, sa courbe d'apprentissage adaptée au contexte académique, et sa maturité pour les applications CRUD métier (Welling &amp; Thomson, 2016 ; Nixon, 2021 ; PHP Group, 2024).</p>
+
+<h3>1.5.5 Frontend et expérience utilisateur</h3>
+
+<p>L'interface utilisateur (UI) et l'expérience utilisateur (UX) conditionnent l'adoption du système (Norman, 2013 ; Nielsen, 1994). Les principes d'utilisabilité — visibilité du statut, correspondance avec le monde réel, contrôle utilisateur, cohérence, prévention d'erreurs — guident la conception des écrans PLANIPRO (tableaux de bord, listes filtrables, calendrier FullCalendar, formulaires validés).</p>
+
+<h2>1.6 Bases de données relationnelles</h2>
+
+<h3>1.6.1 Fondements</h3>
+
+<p>Le modèle relationnel, introduit par Codd (1970), organise les données en relations (tables) composées de tuples (lignes) et d'attributs (colonnes). Les clés primaires et étrangères assurent l'identification et l'intégrité référentielle (Date, 2003 ; Elmasri &amp; Navathe, 2015).</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 1.6 ]</div>
+  <span class="fig-hint">À dessiner : exemple pédagogique Entité-Association (Entreprise — reçoit — Rendez-vous — demandé_par — User) avec cardinalités.</span>
+  <div class="fig-caption">Figure 1.6 — Illustration du modèle relationnel (entités et associations)</div>
+</div>
+
+<h3>1.6.2 Normalisation</h3>
+
+<p>La normalisation (1FN, 2FN, 3FN, FBCN) réduit la redondance et les anomalies de mise à jour (Codd, 1972 ; Connolly &amp; Begg, 2014). Le schéma PLANIPRO sépare les comptes (<span class="code">users</span>), les profils métier (<span class="code">entreprises</span>, <span class="code">clients</span>, <span class="code">partenaires</span>), les transactions (<span class="code">rendez_vous</span>, <span class="code">activites</span>) et les modules transverses (notifications, historique, messagerie).</p>
+
+<h3>1.6.3 SQL et accès sécurisé</h3>
+
+<p>Le langage SQL permet l'interrogation et la manipulation des données (Chamberlin &amp; Boyce, 1974). L'accès via PDO avec requêtes préparées constitue une défense essentielle contre les injections SQL (OWASP, 2021 ; PHP Manual, 2024).</p>
+
+<h2>1.7 Sécurité des applications web</h2>
+
+<h3>1.7.1 Enjeux</h3>
+
+<p>Les applications web exposées (même en intranet) font face à des risques : authentification faible, injection, XSS, CSRF, exposition de données, mauvaises configurations (OWASP Top 10, 2021). La sécurité doit être conçue dès l'analyse, et non ajoutée a posteriori (Schneier, 2015 ; Anderson, 2020).</p>
+
+<h3>1.7.2 Contre-mesures retenues dans la littérature et appliquées</h3>
+<ul>
+  <li>Hachage des mots de passe (bcrypt / <span class="code">password_hash</span>) (Provos &amp; Mazières, 1999) ;</li>
+  <li>Sessions serveur et contrôle de rôle ;</li>
+  <li>Jetons CSRF sur les formulaires POST ;</li>
+  <li>Échappement des sorties HTML (anti-XSS) ;</li>
+  <li>Requêtes préparées (anti-injection) ;</li>
+  <li>Isolation multi-entreprises par <span class="code">entreprise_id</span> ;</li>
+  <li>Validation des redirections (anti open-redirect).</li>
+</ul>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 1.7 ]</div>
+  <span class="fig-hint">À dessiner : tableau ou schéma « Menace → Contre-mesure » (Injection SQL→PDO ; XSS→échappement ; CSRF→token ; Vol de session→regénération/timeout ; etc.).</span>
+  <div class="fig-caption">Figure 1.7 — Menaces web et contre-mesures mobilisées par PLANIPRO</div>
+</div>
+
+<h2>1.8 Génie logiciel et méthodes de conception</h2>
+
+<h3>1.8.1 Génie logiciel</h3>
+
+<p>Le génie logiciel est l'application d'une approche systématique, disciplinée et quantifiable au développement, à l'opération et à la maintenance du logiciel (IEEE, 1990 ; Pressman &amp; Maxim, 2019). Il couvre exigences, conception, construction, tests et maintenance (SWEBOK, 2014).</p>
+
+<h3>1.8.2 UML et Merise</h3>
+
+<p>UML (Unified Modeling Language) fournit un ensemble de diagrammes (cas d'utilisation, classes, séquences, activités) pour modéliser les systèmes orientés objet (Booch et al., 2005 ; Rumbaugh et al., 2004). En francophonie, la méthode Merise (Tardieu et al., 2000 ; Nanci &amp; Espinasse, 2001) reste très utilisée pour le MCD/MLD/MPD des bases de données. Notre conception combine les deux approches : Merise pour les données, UML pour les acteurs, cas d'utilisation et interactions.</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 1.8 ]</div>
+  <span class="fig-hint">À dessiner : comparaison visuelle Cycle en cascade / Cycle en V / Approche itérative — et indiquer l'approche mixte retenue pour PLANIPRO.</span>
+  <div class="fig-caption">Figure 1.8 — Comparaison des approches de développement</div>
+</div>
+
+<h3>1.8.3 Exigences fonctionnelles et non fonctionnelles</h3>
+
+<p>Les exigences fonctionnelles décrivent ce que le système doit faire ; les non fonctionnelles décrivent comment (performance, sécurité, utilisabilité, maintenabilité) (IEEE 830 ; Robertson &amp; Robertson, 2012 ; Wiegers &amp; Beatty, 2013). Cette distinction structure nos chapitres II et III.</p>
+
+<h2>1.9 Concepts clés propres à PLANIPRO</h2>
+
+<p>Au terme de cette revue, nous retenons les concepts opérationnels suivants, qui constitueront le vocabulaire du système :</p>
+<ul>
+  <li><strong>Entreprise :</strong> organisation propriétaire d'un espace PLANIPRO ;</li>
+  <li><strong>Visiteur :</strong> compte opérationnel créé par l'entreprise (rôle technique <span class="code">employe</span>) ;</li>
+  <li><strong>Client / Partenaire :</strong> interlocuteurs externes rattachés, pouvant demander des RDV ;</li>
+  <li><strong>Rendez-vous :</strong> engagement planifié avec cycle de vie formalisé ;</li>
+  <li><strong>Activité :</strong> tâche interne assignable, priorisée et mesurable ;</li>
+  <li><strong>Contact public :</strong> message issu de l'accueil sans authentification obligatoire ;</li>
+  <li><strong>Notification :</strong> alerte in-app (connecté) ou publique (jeton / cookie) ;</li>
+  <li><strong>Conversation :</strong> fil de messagerie 1–1 entre utilisateurs autorisés.</li>
+</ul>
+
+<p class="table-caption">Tableau 1.3 — Synthèse des concepts théoriques mobilisés</p>
+<table>
+  <tr><th>Domaine</th><th>Concepts clés</th><th>Auteurs / sources de référence</th></tr>
+  <tr><td>SI</td><td>Information, décision, TPS/MIS</td><td>Reix ; Laudon ; Alter</td></tr>
+  <tr><td>Planification</td><td>Temps, RDV, scheduling</td><td>Drucker ; Pinedo ; Covey</td></tr>
+  <tr><td>Activités</td><td>Tâche, priorité, Kanban</td><td>PMI ; Anderson</td></tr>
+  <tr><td>Web</td><td>3-tiers, MVC, UX</td><td>Fowler ; Norman ; Nielsen</td></tr>
+  <tr><td>Données</td><td>Relationnel, SQL, normalisation</td><td>Codd ; Date ; Elmasri</td></tr>
+  <tr><td>Sécurité</td><td>OWASP, hachage, CSRF</td><td>OWASP ; Schneier</td></tr>
+  <tr><td>Génie logiciel</td><td>UML, Merise, exigences</td><td>Sommerville ; Booch ; Tardieu</td></tr>
+</table>
+
+<h2>1.2.5 Systèmes d'information et transformation numérique</h2>
+
+<p>La transformation numérique ne se limite pas à l'achat d'outils informatiques : elle implique une reconfiguration des processus, des compétences et parfois du modèle d'affaires (Brynjolfsson &amp; McAfee, 2014 ; Westerman et al., 2014). Pour une PME, l'enjeu n'est pas de reproduire les plateformes des grandes entreprises, mais de digitaliser les processus à plus fort impact — dont la planification des interactions avec clients et partenaires (Weill &amp; Ross, 2004).</p>
+
+<p>Dans cette perspective, PLANIPRO s'inscrit comme un SI opérationnel de type « transactionnel + collaboration », susceptible d'évoluer vers un SI de management dès lors que les données de rendez-vous et d'activités alimentent des indicateurs (DeLone &amp; McLean, 2003). La réussite d'un tel système dépend autant de la qualité technique que de l'acceptation utilisateur (Davis, 1989 ; Venkatesh et al., 2003 ; Rogers, 2003).</p>
+
+<p>Plusieurs facteurs critiques de succès (CSF) sont recensés dans la littérature : soutien de la direction, implication des utilisateurs, qualité des données, formation, et alignement stratégique IT/métier (Henderson &amp; Venkatraman, 1993 ; Markus, 1983). Notre conception tente d'anticiper ces facteurs en privilégiant une interface simple, un modèle de rôles explicite et une documentation claire.</p>
+
+
+<h2>1.3.5 Typologie des systèmes de prise de rendez-vous</h2>
+
+<p>On peut distinguer plusieurs catégories de solutions (Gartner, 2022) :</p>
+<ul>
+  <li><strong>Agendas personnels synchronisés</strong> (Google Calendar, Outlook) : excellents pour l'individu, faibles sur le workflow multi-acteurs métier.</li>
+  <li><strong>Outils de scheduling self-service</strong> (Calendly, Cal.com) : le demandeur choisit un créneau libre ; peu de notion d'acceptation/refus managérial enrichi, ni d'activités internes.</li>
+  <li><strong>CRM avec module RDV</strong> : puissants mais coûteux et lourds pour une petite structure.</li>
+  <li><strong>Suites collaboratives</strong> (Asana, Monday, ClickUp) : fortes sur les tâches, plus faibles sur le cycle de validation des RDV B2B.</li>
+  <li><strong>Développements spécifiques</strong> : adaptés au contexte local, contrôlables, mais demandant une compétence informatique — cas de PLANIPRO.</li>
+</ul>
+
+<p>Cette typologie confirme qu'un développement spécifique reste pertinent lorsque le besoin combine workflow de validation, multi-rôles, activités, messagerie et hébergement local (Porter, 1985).</p>
+
+
+<h2>1.5.6 Protocoles et couches du web</h2>
+
+<p>Le fonctionnement d'une application web repose sur une pile protocolaire : DNS, TCP/IP, TLS (HTTPS), HTTP (méthodes GET/POST), HTML pour la structure, CSS pour la présentation, JavaScript pour l'interactivité (Fielding, 2000 ; RFC 9110, 2022). PLANIPRO utilise principalement le rendu serveur (SSR) en PHP, complété par du JavaScript pour le calendrier et quelques interactions. Ce choix favorise la simplicité de déploiement sur hébergement mutualisé classique.</p>
+
+<p>La session HTTP, par nature sans état (stateless), est compensée côté serveur par un identifiant de session stocké (cookie). La sécurisation de cette session — non prévisibilité, régénération, timeout — fait partie des bonnes pratiques (OWASP, 2021 ; NIST SP 800-63).</p>
+
+
+<h2>1.6.4 Intégrité et transactions</h2>
+
+<p>Le moteur InnoDB de MySQL/MariaDB offre des transactions ACID (Atomicité, Cohérence, Isolation, Durabilité) indispensables dès lors qu'une opération métier touche plusieurs tables — par exemple création d'un utilisateur client + profil <span class="code">clients</span> + notification (Silberschatz et al., 2019). Même lorsque le code PHP n'ouvre pas explicitement une transaction pour chaque action, le design des clés étrangères et des contraintes limite les états incohérents.</p>
+
+<p>Les index définis sur <span class="code">statut</span>, <span class="code">dates</span>, <span class="code">role</span> et jetons publics accélèrent les filtres fréquents du tableau de bord et du calendrier, conformément aux recommandations d'optimisation SQL (MySQL Reference Manual, 2024).</p>
+
+
+<h2>1.8.4 Approche retenue pour PLANIPRO</h2>
+
+<p>Nous retenons une approche hybride :</p>
+<ol>
+  <li>phase d'étude et de conception amont (proche du cycle en V pour les exigences et le modèle de données) ;</li>
+  <li>réalisation itérative par modules (esprit Agile / incrémental) ;</li>
+  <li>tests de validation à chaque incrément ;</li>
+  <li>documentation continue (README, CONCEPTION.md, présent mémoire).</li>
+</ol>
+<p>Cette hybridation est fréquente dans les projets académiques et PME, où la rigidité pure du cascade échoue et où le « full Agile » sans cadrage produit de la dette technique (Boehm, 1988 ; Fitzgerald et al., 2002).</p>
+
+
+
+<h2>1.10 Conclusion du chapitre</h2>
+
+<p>Ce chapitre a posé les fondements théoriques nécessaires à la compréhension et à la conception de PLANIPRO. Les systèmes d'information fournissent le cadre organisationnel ; la gestion des rendez-vous et des activités définit le domaine métier ; les architectures web, les bases relationnelles et la sécurité constituent le socle technique ; le génie logiciel offre la méthode. Le chapitre suivant confronte ces concepts à la réalité de l'existant et aux problèmes concrètement observés.</p>
+
+<p class="center"><em>*** Fin du chapitre I ***</em></p>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE II -->
+<!-- ============================================================ -->
+<h1>CHAPITRE II — ÉTUDE DE L'EXISTANT ET ANALYSE DU PROBLÈME</h1>
+
+<h2>2.1 Introduction</h2>
+
+<p>Avant de proposer une solution informatique, il est indispensable de comprendre comment les acteurs organisent aujourd'hui leurs rendez-vous et leurs activités, quels outils ils utilisent, et où se situent les dysfonctionnements (Avison &amp; Fitzgerald, 2006 ; Cadle et al., 2014). Ce chapitre présente le domaine d'étude, décrit l'existant (situation « as-is »), en fait une analyse critique, formule le problème, compare les solutions du marché et déduit les besoins qui guideront la conception de PLANIPRO.</p>
+
+<h2>2.2 Présentation du domaine d'étude</h2>
+
+<h3>2.2.1 Contexte organisationnel</h3>
+
+<p>Le domaine cible est celui des entreprises — notamment PME et structures de services — qui entretiennent des interactions planifiées avec des clients, des partenaires et des visiteurs (prospects, collaborateurs externes, interlocuteurs ponctuels). Ces organisations doivent :</p>
+<ul>
+  <li>recevoir des demandes de rencontre ;</li>
+  <li>confirmer, reporter ou refuser des créneaux ;</li>
+  <li>répartir le travail interne (activités / tâches) ;</li>
+  <li>conserver une trace des échanges ;</li>
+  <li>disposer d'une vue calendaire et de synthèses périodiques.</li>
+</ul>
+
+<p>Dans de nombreux contextes africains et émergents, la pénétration du smartphone et de la messagerie instantanée est élevée, mais l'usage d'outils métier intégrés reste inégal (GSMA, 2023 ; ITU, 2023). Il en résulte une digitalisation « partielle » : communication rapide, mais planification peu structurée.</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 2.1 ]</div>
+  <span class="fig-hint">À dessiner : cartographie des acteurs autour de l'Entreprise (centre) — Clients, Partenaires, Visiteurs, Public — avec flèches « demande RDV », « message », « activité assignée ».</span>
+  <div class="fig-caption">Figure 2.1 — Cartographie des acteurs du domaine</div>
+</div>
+
+<h3>2.2.2 Périmètre observé</h3>
+
+<p>L'étude de l'existant s'est appuyée sur : (i) l'observation des pratiques courantes de planification en PME ; (ii) l'analyse d'outils largement répandus (agendas, tableurs, messageries) ; (iii) la documentation fonctionnelle de solutions concurrentes ou proches (Google Calendar, Calendly, Microsoft Bookings, Trello/Asana pour les tâches). Cette triangulation documentaire et empirique est recommandée en analyse des systèmes (Yin, 2018 ; Miles et al., 2014).</p>
+
+<h2>2.3 Description de l'existant</h2>
+
+<h3>2.3.1 Pratiques actuelles de prise de rendez-vous</h3>
+
+<p>Le processus « as-is » le plus fréquent se déroule ainsi :</p>
+<ol>
+  <li>Le client ou partenaire contacte l'entreprise par téléphone, WhatsApp ou e-mail.</li>
+  <li>Un collaborateur propose oralement un créneau, parfois après consultation d'un agenda papier ou d'un calendrier personnel.</li>
+  <li>La confirmation n'est pas toujours formalisée ; le report se fait par un nouveau message informel.</li>
+  <li>Le jour J, l'information peut être oubliée, mal transmise à un collègue, ou en conflit avec un autre engagement.</li>
+  <li>L'historique des rendez-vous passés est rarement consolidé pour analyse.</li>
+</ol>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 2.2 ]</div>
+  <span class="fig-hint">À dessiner : diagramme de flux « as-is » (BPMN simplifié ou diagramme d'activités) — Client → Appel/WhatsApp → Secrétariat → Agenda papier/Excel → Confirmation orale → RDV. Marquer les points de rupture (éclair rouge).</span>
+  <div class="fig-caption">Figure 2.2 — Processus actuel de prise de rendez-vous (as-is)</div>
+</div>
+
+<h3>2.3.2 Gestion des activités internes</h3>
+
+<p>Les activités (relances, préparations de dossier, suivis post-RDV) sont souvent consignées sur des carnets, des post-it, des fichiers Excel individuels ou des fils de discussion WhatsApp. L'absence d'affectation claire, de priorité partagée et de taux d'avancement visible provoque des oublis et une charge mentale élevée pour les responsables (Allen, 2015 ; Newport, 2016).</p>
+
+<h3>2.3.3 Communication et traçabilité</h3>
+
+<p>Les échanges se déroulent sur des canaux personnels. Lorsque le collaborateur change de téléphone ou quitte l'organisation, la mémoire organisationnelle disparaît. Or, la traçabilité est un pilier de la qualité et, dans certains secteurs, une exigence de conformité (ISO 9001, 2015 ; Davenport, 1993).</p>
+
+<p class="table-caption">Tableau 2.1 — Inventaire des pratiques actuelles de planification</p>
+<table>
+  <tr><th>Processus</th><th>Outil / support fréquent</th><th>Acteurs</th><th>Niveau de formalisation</th></tr>
+  <tr><td>Demande de RDV</td><td>Téléphone, WhatsApp, e-mail</td><td>Client, partenaire</td><td>Faible</td></tr>
+  <tr><td>Confirmation</td><td>Oral / message</td><td>Secrétariat, manager</td><td>Faible à moyen</td></tr>
+  <tr><td>Planning</td><td>Agenda papier, Google Calendar perso</td><td>Individuel</td><td>Moyen</td></tr>
+  <tr><td>Activités</td><td>Excel, post-it, mémoire</td><td>Équipe</td><td>Faible</td></tr>
+  <tr><td>Historique</td><td>Souvent inexistant</td><td>—</td><td>Très faible</td></tr>
+  <tr><td>Reporting</td><td>Occasionnel, manuel</td><td>Direction</td><td>Faible</td></tr>
+</table>
+
+<h2>2.4 Analyse critique de l'existant</h2>
+
+<h3>2.4.1 Faiblesses identifiées</h3>
+<ul>
+  <li><strong>Fragmentation des outils :</strong> aucune source unique de vérité pour le planning.</li>
+  <li><strong>Risque de double réservation :</strong> agendas non synchronisés.</li>
+  <li><strong>Absence de workflow de validation :</strong> pas d'état formel « en attente / accepté / refusé ».</li>
+  <li><strong>Faible traçabilité :</strong> difficile de savoir qui a décidé quoi, et quand.</li>
+  <li><strong>Mauvaise visibilité managériale :</strong> pas de tableau de bord consolidé.</li>
+  <li><strong>Déperdition d'information :</strong> canaux personnels non institutionnels.</li>
+  <li><strong>Onboarding difficile des visiteurs / contacts :</strong> création manuelle anarchique des fiches.</li>
+</ul>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 2.3 ]</div>
+  <span class="fig-hint">À dessiner : diagramme d'Ishikawa (arêtes de poisson). Effet : « Planification inefficace ». Causes : Méthodes, Moyens, Main-d'œuvre, Milieu, Matériel, Management — détailler sous-causes (agenda papier, pas de procédure, turnover, etc.).</span>
+  <div class="fig-caption">Figure 2.3 — Diagramme d'Ishikawa des causes de dysfonctionnement</div>
+</div>
+
+<h3>2.4.2 Forces de l'existant</h3>
+<p>Il serait injuste de nier certains atouts : rapidité du contact informel, faible coût apparent, familiarité des outils grand public, flexibilité. Toute solution proposée doit préserver la simplicité d'accès, sous peine de rejet (Davis, 1989 — Technology Acceptance Model ; Venkatesh et al., 2003 — UTAUT).</p>
+
+<p class="table-caption">Tableau 2.2 — Analyse des forces et faiblesses de l'existant</p>
+<table>
+  <tr><th>Forces</th><th>Faiblesses</th></tr>
+  <tr><td>Rapidité du contact informel</td><td>Pas de formalisation des statuts</td></tr>
+  <tr><td>Outils connus (WhatsApp, Excel)</td><td>Données dispersées et non sécurisées</td></tr>
+  <tr><td>Coût direct faible</td><td>Coût caché (oublis, conflits, stress)</td></tr>
+  <tr><td>Flexibilité</td><td>Pas de reporting fiable</td></tr>
+</table>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 2.4 ]</div>
+  <span class="fig-hint">À dessiner : matrice SWOT (Forces, Faiblesses, Opportunités, Menaces) de la situation actuelle de planification en PME.</span>
+  <div class="fig-caption">Figure 2.4 — Matrice SWOT de l'existant</div>
+</div>
+
+<h3>2.4.3 Impacts organisationnels</h3>
+<p>Les impacts observés ou rapportés dans la littérature incluent : perte de temps administratif, dégradation de l'image de l'entreprise, insatisfaction client, surcharge cognitive des équipes, impossibilité de mesurer la performance du service (Parasuraman et al., 1988 — SERVQUAL ; Kaplan &amp; Norton, 1996).</p>
+
+<h2>2.5 Formulation du problème</h2>
+
+<p>Au regard de l'analyse, le problème central peut être énoncé comme suit :</p>
+<blockquote>
+  <strong>L'absence d'un système d'information intégré, multi-acteurs et sécurisé pour la gestion des rendez-vous et des activités professionnelles entraîne une fragmentation des données, des erreurs de planning, une faible traçabilité des décisions et une communication difficilement auditable entre l'entreprise et ses interlocuteurs.</strong>
+</blockquote>
+
+<p>Ce problème se manifeste à travers des symptômes mesurables : nombre de reports non consignés, RDV oubliés, activités sans responsable, messages introuvables, impossibilité d'éditer un rapport mensuel fiable.</p>
+
+<h2>2.6 Analyse comparative des solutions existantes</h2>
+
+<p>Plusieurs solutions du marché adressent une partie du besoin. Nous en comparons les principaux représentants.</p>
+
+<p class="table-caption">Tableau 2.3 — Comparaison fonctionnelle des solutions du marché</p>
+<table>
+  <tr>
+    <th>Critère</th>
+    <th>Agenda papier</th>
+    <th>Excel</th>
+    <th>Google Calendar</th>
+    <th>Calendly</th>
+    <th>Asana/Trello</th>
+    <th>PLANIPRO (cible)</th>
+  </tr>
+  <tr><td>Prise de RDV multi-rôles</td><td>△</td><td>△</td><td>△</td><td>✓</td><td>—</td><td>✓</td></tr>
+  <tr><td>Validation formelle (workflow)</td><td>—</td><td>△</td><td>△</td><td>△</td><td>△</td><td>✓</td></tr>
+  <tr><td>Activités + progression</td><td>—</td><td>△</td><td>—</td><td>—</td><td>✓</td><td>✓</td></tr>
+  <tr><td>Messagerie liée au métier</td><td>—</td><td>—</td><td>—</td><td>—</td><td>△</td><td>✓</td></tr>
+  <tr><td>Contacts clients/partenaires</td><td>△</td><td>△</td><td>△</td><td>△</td><td>△</td><td>✓</td></tr>
+  <tr><td>Contact public + suivi</td><td>—</td><td>—</td><td>—</td><td>△</td><td>—</td><td>✓</td></tr>
+  <tr><td>Rapports / export</td><td>—</td><td>✓</td><td>△</td><td>△</td><td>△</td><td>✓</td></tr>
+  <tr><td>Coût pour PME locale</td><td>Faible</td><td>Faible</td><td>Faible</td><td>Variable</td><td>Variable</td><td>Maîtrisé</td></tr>
+  <tr><td>Hébergement local possible</td><td>n/a</td><td>Oui</td><td>Non</td><td>Non</td><td>Non</td><td>Oui</td></tr>
+</table>
+<p class="small center">Légende : ✓ couvert — △ partiel — — non couvert</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 2.5 ]</div>
+  <span class="fig-hint">À réaliser : graphique radar ou barres comparant les outils sur 6 axes (RDV, activités, messagerie, contacts, rapports, coût). Mettre PLANIPRO en évidence.</span>
+  <div class="fig-caption">Figure 2.5 — Comparaison visuelle des outils existants et de PLANIPRO</div>
+</div>
+
+<p>Il ressort que nulle solution grand public ne couvre simultanément, de façon simple et localement déployable : workflow de RDV multi-rôles, activités internes, messagerie métier, contacts, notifications publiques et rapports. D'où la pertinence d'une solution dédiée (Porter, 1985 — avantage différenciant par spécialisation fonctionnelle).</p>
+
+<h2>2.7 Besoins identifiés</h2>
+
+<h3>2.7.1 Besoins fonctionnels</h3>
+
+<p class="table-caption">Tableau 2.4 — Besoins fonctionnels prioritaires</p>
+<table>
+  <tr><th>ID</th><th>Besoin</th><th>Priorité</th><th>Acteurs concernés</th></tr>
+  <tr><td>BF01</td><td>S'inscrire / se connecter selon le rôle</td><td>Haute</td><td>Tous</td></tr>
+  <tr><td>BF02</td><td>Demander un rendez-vous</td><td>Haute</td><td>Client, Partenaire</td></tr>
+  <tr><td>BF03</td><td>Valider / refuser / reporter / annuler / terminer un RDV</td><td>Haute</td><td>Entreprise</td></tr>
+  <tr><td>BF04</td><td>Créer et assigner des activités</td><td>Haute</td><td>Entreprise, Visiteur</td></tr>
+  <tr><td>BF05</td><td>Visualiser le planning (calendrier)</td><td>Haute</td><td>Entreprise, Visiteur</td></tr>
+  <tr><td>BF06</td><td>Gérer clients, partenaires, visiteurs</td><td>Haute</td><td>Entreprise</td></tr>
+  <tr><td>BF07</td><td>Messagerie interne</td><td>Moyenne</td><td>Tous connectés</td></tr>
+  <tr><td>BF08</td><td>Contact public + notifications</td><td>Moyenne</td><td>Public, Entreprise</td></tr>
+  <tr><td>BF09</td><td>Notifications / rappels RDV</td><td>Moyenne</td><td>Tous</td></tr>
+  <tr><td>BF10</td><td>Rapports et export PDF</td><td>Moyenne</td><td>Entreprise</td></tr>
+  <tr><td>BF11</td><td>Paramètres de profil / fiche entreprise</td><td>Basse</td><td>Tous / Entreprise</td></tr>
+</table>
+
+<h3>2.7.2 Besoins non fonctionnels</h3>
+
+<p class="table-caption">Tableau 2.5 — Besoins non fonctionnels</p>
+<table>
+  <tr><th>ID</th><th>Catégorie</th><th>Exigence</th></tr>
+  <tr><td>BNF01</td><td>Sécurité</td><td>Mots de passe hashés, CSRF, contrôle de rôle, isolation des données</td></tr>
+  <tr><td>BNF02</td><td>Utilisabilité</td><td>Interface claire, navigation par rôle, formulaires guidés</td></tr>
+  <tr><td>BNF03</td><td>Performance</td><td>Temps de réponse acceptable en local (&lt; 2–3 s pour les écrans courants)</td></tr>
+  <tr><td>BNF04</td><td>Maintenabilité</td><td>Code organisé (pages/actions/includes), schéma SQL documenté</td></tr>
+  <tr><td>BNF05</td><td>Portabilité</td><td>Fonctionnement sur XAMPP (Windows) ; stack PHP/MySQL standard</td></tr>
+  <tr><td>BNF06</td><td>Fiabilité</td><td>Intégrité référentielle, gestion des erreurs de saisie</td></tr>
+  <tr><td>BNF07</td><td>Compatibilité</td><td>Navigateurs modernes (Chrome, Firefox, Edge)</td></tr>
+</table>
+
+<h2>2.4.4 Analyse des risques liés à l'existant</h2>
+
+<p>Une grille de risques (probabilité × impact) permet de prioriser les problèmes (PMI, 2021) :</p>
+<table>
+  <tr><th>Risque</th><th>Probabilité</th><th>Impact</th><th>Niveau</th><th>Mitigation via PLANIPRO</th></tr>
+  <tr><td>Double réservation</td><td>Moyenne</td><td>Élevé</td><td>Élevé</td><td>Planning central + statuts</td></tr>
+  <tr><td>Oubli de RDV</td><td>Élevée</td><td>Élevé</td><td>Critique</td><td>Calendrier + rappels 24 h</td></tr>
+  <tr><td>Perte d'historique</td><td>Élevée</td><td>Moyen</td><td>Élevé</td><td>BDD + table historique</td></tr>
+  <tr><td>Fuite d'info (téléphone perso)</td><td>Moyenne</td><td>Élevé</td><td>Élevé</td><td>Messagerie institutionnelle + rôles</td></tr>
+  <tr><td>Absence de reporting</td><td>Élevée</td><td>Moyen</td><td>Élevé</td><td>Module rapports / PDF</td></tr>
+  <tr><td>Dépendance à un collaborateur</td><td>Moyenne</td><td>Élevé</td><td>Élevé</td><td>Compte entreprise partagé / traçabilité</td></tr>
+</table>
+<p class="table-caption">Tableau 2.6 — Matrice des risques de l'existant et mitigations</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 2.6 ]</div>
+  <span class="fig-hint">À dessiner : carte des risques (axe Probabilité × Impact) avec les 6 risques ci-dessus positionnés.</span>
+  <div class="fig-caption">Figure 2.6 — Cartographie des risques liés à la planification actuelle</div>
+</div>
+
+
+<h2>2.5.1 Causes racines (5 Pourquoi — extrait)</h2>
+<p><strong>Problème :</strong> un client se présente alors que le créneau a été donné à quelqu'un d'autre.</p>
+<ol>
+  <li>Pourquoi ? Parce que deux collaborateurs ont confirmé sans se synchroniser.</li>
+  <li>Pourquoi ? Parce qu'il n'existe pas de planning unique partagé.</li>
+  <li>Pourquoi ? Parce que l'outil utilisé est un agenda personnel.</li>
+  <li>Pourquoi ? Parce qu'aucun SI métier de RDV n'a été mis en place.</li>
+  <li>Pourquoi ? Parce que le besoin n'a pas été formalisé ni priorisé dans la digitalisation.</li>
+</ol>
+<p>La cause racine pointe vers l'absence d'un système d'information dédié — précisément l'objet de ce mémoire (Ohno, 1988 ; Davenport, 1993).</p>
+
+
+<h2>2.7.3 Exigences de qualité logicielle (ISO/IEC 25010)</h2>
+<p>Outre les BNF du tableau 2.5, nous nous référons au modèle ISO/IEC 25010 : aptitude fonctionnelle, efficience de performance, compatibilité, utilisabilité, fiabilité, sécurité, maintenabilité, portabilité. PLANIPRO vise un niveau « satisfaisant pour prototype académique / PME » sur chacune de ces caractéristiques, avec une attention particulière à la sécurité et à l'utilisabilité.</p>
+
+
+
+<h2>2.8 Conclusion du chapitre</h2>
+
+<p>L'étude de l'existant révèle une planification encore trop dépendante de canaux informels et d'outils non intégrés. Les solutions du marché ne couvrent que partiellement le besoin d'une PME souhaitant unifier rendez-vous, activités, contacts, messagerie et rapports, éventuellement en hébergement local. Les besoins fonctionnels et non fonctionnels identifiés forment le cahier des charges qui oriente le chapitre suivant : analyse et conception détaillée de PLANIPRO.</p>
+
+<p class="center"><em>*** Fin du chapitre II ***</em></p>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE III -->
+<!-- ============================================================ -->
+<h1>CHAPITRE III — ANALYSE ET CONCEPTION DU SYSTÈME</h1>
+
+<h2>3.1 Introduction</h2>
+
+<p>Ce chapitre transforme les besoins identifiés en spécifications et en modèles : acteurs, cas d'utilisation, processus métier, modèle de données, architecture technique, maquettes d'interfaces et règles de sécurité. La démarche combine UML et Merise, conformément aux bonnes pratiques francophones d'analyse des SI (Nanci &amp; Espinasse, 2001 ; Roques, 2018 ; Gabay &amp; Gabay, 2008).</p>
+
+<h2>3.2 Spécification des besoins</h2>
+
+<h3>3.2.1 Besoins fonctionnels détaillés</h3>
+
+<p>À partir du tableau 2.4, nous précisons les exigences sous forme de déclarations « le système doit » :</p>
+<ul>
+  <li><strong>Authentification :</strong> le système doit permettre la connexion unifiée par e-mail et mot de passe, et l'inscription publique réservée aux entreprises.</li>
+  <li><strong>Rendez-vous :</strong> le système doit permettre la création de demandes, leur filtrage, et les transitions de statut (accepter, refuser, reporter, annuler, terminer) avec commentaire éventuel.</li>
+  <li><strong>Activités :</strong> le système doit permettre la création, l'édition, la suppression, l'assignation, le suivi de priorité, de statut et de progression (0–100 %).</li>
+  <li><strong>Calendrier :</strong> le système doit afficher les RDV et les activités à échéance en vues mois / semaine / jour / liste.</li>
+  <li><strong>Contacts :</strong> le système doit permettre la gestion des clients, partenaires et visiteurs (création, activation/désactivation).</li>
+  <li><strong>Messagerie :</strong> le système doit offrir des conversations 1–1 entre utilisateurs autorisés.</li>
+  <li><strong>Contact public :</strong> le système doit permettre à un visiteur non connecté de contacter une entreprise et de suivre les réponses via un jeton.</li>
+  <li><strong>Notifications :</strong> le système doit générer des alertes in-app et des rappels pour les RDV proches (24 h).</li>
+  <li><strong>Rapports :</strong> le système doit produire des synthèses et un export PDF / impression.</li>
+</ul>
+
+<h3>3.2.2 Contraintes de conception</h3>
+<ul>
+  <li>Stack : PHP 8+, MySQL/MariaDB, Apache, HTML/CSS/JS.</li>
+  <li>Pas de framework lourd imposé (lisibilité pédagogique du code).</li>
+  <li>Sessions PHP pour l'état d'authentification.</li>
+  <li>Encodage UTF-8 / utf8mb4 pour le support multilingue et des accents.</li>
+</ul>
+
+<h2>3.3 Identification des acteurs</h2>
+
+<p class="table-caption">Tableau 3.1 — Acteurs du système PLANIPRO</p>
+<table>
+  <tr><th>Acteur</th><th>Rôle technique</th><th>Création du compte</th><th>Responsabilités principales</th></tr>
+  <tr><td>Entreprise</td><td><span class="code">entreprise</span></td><td>Inscription publique</td><td>Piloter planning, valider RDV, gérer contacts &amp; visiteurs, rapports</td></tr>
+  <tr><td>Visiteur</td><td><span class="code">employe</span></td><td>Créé par l'entreprise</td><td>Consulter RDV/activités assignés, messagerie, calendrier</td></tr>
+  <tr><td>Client</td><td><span class="code">client</span></td><td>Créé par l'entreprise</td><td>Demander RDV, suivre historique</td></tr>
+  <tr><td>Partenaire</td><td><span class="code">partenaire</span></td><td>Créé par l'entreprise</td><td>Demander RDV / collaborations</td></tr>
+  <tr><td>Public</td><td>—</td><td>Sans compte</td><td>Voir entreprises, contacter, suivre notifications publiques</td></tr>
+</table>
+
+<p class="table-caption">Tableau 3.2 — Matrice des droits d'accès (synthèse)</p>
+<table>
+  <tr><th>Fonction</th><th>Entreprise</th><th>Visiteur</th><th>Client</th><th>Partenaire</th><th>Public</th></tr>
+  <tr><td>Inscription</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>Voir entreprises</td></tr>
+  <tr><td>Valider RDV</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+  <tr><td>Demander RDV</td><td>✓ (création)</td><td>—</td><td>✓</td><td>✓</td><td>Via message</td></tr>
+  <tr><td>Activités</td><td>✓</td><td>Lecture assignées</td><td>—</td><td>—</td><td>—</td></tr>
+  <tr><td>Calendrier</td><td>✓</td><td>Ses événements</td><td>—</td><td>—</td><td>—</td></tr>
+  <tr><td>Messagerie</td><td>✓</td><td>✓</td><td>✓</td><td>✓</td><td>—</td></tr>
+  <tr><td>Messages publics</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>Écrire / suivre</td></tr>
+  <tr><td>Rapports</td><td>✓</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+</table>
+
+<h2>3.4 Cas d'utilisation</h2>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.1 ]</div>
+  <span class="fig-hint">À dessiner sous StarUML / Draw.io / Visual Paradigm : diagramme de cas d'utilisation global. Acteurs à gauche/droite, ovales au centre (Se connecter, Gérer RDV, Gérer activités, Gérer contacts, Messagerie, Calendrier, Rapports, Contacter entreprise…). Relations include/extend si besoin.</span>
+  <div class="fig-caption">Figure 3.1 — Diagramme des cas d'utilisation global de PLANIPRO</div>
+</div>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.2 ]</div>
+  <span class="fig-hint">Zoom module Rendez-vous : Demander RDV, Modifier demande, Annuler, Accepter, Refuser, Reporter, Terminer, Filtrer, Ouvrir messagerie depuis RDV.</span>
+  <div class="fig-caption">Figure 3.2 — Cas d'utilisation — module Rendez-vous</div>
+</div>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.3 ]</div>
+  <span class="fig-hint">Zoom module Activités : Créer, Modifier, Supprimer, Assigner, Mettre à jour progression, Consulter (visiteur).</span>
+  <div class="fig-caption">Figure 3.3 — Cas d'utilisation — module Activités</div>
+</div>
+
+<h3>3.4.1 Description textuelle (exemple) — « Accepter un rendez-vous »</h3>
+<p><strong>Acteur principal :</strong> Entreprise.<br>
+<strong>Préconditions :</strong> l'entreprise est authentifiée ; un RDV existe en statut <em>en_attente</em> (ou reporté à reconfirmer).<br>
+<strong>Scénario nominal :</strong></p>
+<ol>
+  <li>L'entreprise ouvre la liste des rendez-vous et sélectionne un RDV.</li>
+  <li>Elle choisit l'action « Accepter » (éventuellement avec commentaire).</li>
+  <li>Le système met à jour le statut à <em>accepte</em>, enregistre l'historique, notifie le demandeur.</li>
+  <li>Le RDV apparaît dans le calendrier comme événement confirmé.</li>
+</ol>
+<p><strong>Exceptions :</strong> droits insuffisants ; RDV déjà traité ; dates invalides.</p>
+
+<h2>3.5 Modélisation des processus métier</h2>
+
+<h3>3.5.1 Demande et validation d'un RDV</h3>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.4 ]</div>
+  <span class="fig-hint">Diagramme de séquence UML : Client → Interface → Action rdv_demande → BDD rendez_vous → Notification entreprise → Entreprise (rdv_action accepter) → Notification client → Calendrier.</span>
+  <div class="fig-caption">Figure 3.4 — Diagramme de séquence : demande et validation d'un RDV</div>
+</div>
+
+<p><strong>Enchaînement :</strong> (1) le demandeur choisit créneau et motif ; (2) insertion en <em>en_attente</em> ; (3) notification à l'entreprise ; (4) décision (accepter / refuser / reporter) ; (5) notification au demandeur ; (6) visibilité calendrier si accepté ou reporté.</p>
+
+<h3>3.5.2 Contact public vers compte visiteur</h3>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.5 ]</div>
+  <span class="fig-hint">Diagramme d'activités : Message public → Enregistrement contact_public + token → Lecture entreprise → Décision créer compte → Génération identifiants → Notification publique → Connexion visiteur.</span>
+  <div class="fig-caption">Figure 3.5 — Contact public → création de compte visiteur</div>
+</div>
+
+<h2>3.6 Conception de la base de données</h2>
+
+<h3>3.6.1 Modèle conceptuel (MCD)</h3>
+
+<p>Le MCD identifie les entités principales : UTILISATEUR, ENTREPRISE, CLIENT, PARTENAIRE, RENDEZ_VOUS, ACTIVITE, NOTIFICATION, HISTORIQUE, CONVERSATION, MESSAGE, CONTACT_PUBLIC, NOTIFICATION_PUBLIQUE.</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.6 ]</div>
+  <span class="fig-hint">À réaliser avec Looping / PowerDesigner / Draw.io : diagramme entité-association complet avec cardinalités (1,1) (0,n) etc. Reprendre les relations du document CONCEPTION.md.</span>
+  <div class="fig-caption">Figure 3.6 — Modèle conceptuel de données (MCD)</div>
+</div>
+
+<h3>3.6.2 Modèle logique (MLD)</h3>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.7 ]</div>
+  <span class="fig-hint">Schéma relationnel : tables avec PK soulignées, FK en italique, liens fléchés. 12 tables du schéma planipro.</span>
+  <div class="fig-caption">Figure 3.7 — Modèle logique de données (MLD)</div>
+</div>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.8 ]</div>
+  <span class="fig-hint">Diagramme de classes UML simplifié (User, Entreprise, RendezVous, Activite, Conversation, Message…) avec attributs principaux et associations.</span>
+  <div class="fig-caption">Figure 3.8 — Diagramme de classes UML simplifié</div>
+</div>
+
+<h3>3.6.3 Dictionnaire de données (extrait)</h3>
+
+<p class="table-caption">Tableau 3.3 — Dictionnaire de données (extrait — table <span class="code">rendez_vous</span>)</p>
+<table>
+  <tr><th>Attribut</th><th>Type</th><th>Contraintes</th><th>Description</th></tr>
+  <tr><td>id</td><td>INT UNSIGNED</td><td>PK, AI</td><td>Identifiant unique</td></tr>
+  <tr><td>entreprise_id</td><td>INT UNSIGNED</td><td>FK, NOT NULL</td><td>Entreprise destinataire</td></tr>
+  <tr><td>demandeur_id</td><td>INT UNSIGNED</td><td>FK, NOT NULL</td><td>Utilisateur demandeur</td></tr>
+  <tr><td>type_demandeur</td><td>ENUM</td><td>NOT NULL</td><td>client / partenaire / employe</td></tr>
+  <tr><td>titre</td><td>VARCHAR(200)</td><td>NOT NULL</td><td>Titre du RDV</td></tr>
+  <tr><td>motif</td><td>TEXT</td><td>NULL</td><td>Détail</td></tr>
+  <tr><td>date_debut</td><td>DATETIME</td><td>NOT NULL</td><td>Début</td></tr>
+  <tr><td>date_fin</td><td>DATETIME</td><td>NOT NULL</td><td>Fin</td></tr>
+  <tr><td>lieu</td><td>VARCHAR(255)</td><td>NULL</td><td>Lieu</td></tr>
+  <tr><td>statut</td><td>ENUM</td><td>NOT NULL</td><td>Cycle de vie</td></tr>
+  <tr><td>commentaire_entreprise</td><td>TEXT</td><td>NULL</td><td>Commentaire de décision</td></tr>
+</table>
+
+<p class="table-caption">Tableau 3.4 — Catalogue des relations et cardinalités (extrait)</p>
+<table>
+  <tr><th>#</th><th>Relation</th><th>Cardinalité</th><th>Clé étrangère</th></tr>
+  <tr><td>1</td><td>User possède Entreprise</td><td>1 — 0..1</td><td>entreprises.user_id</td></tr>
+  <tr><td>2</td><td>Entreprise rattache Users</td><td>1 — 0..N</td><td>users.entreprise_id</td></tr>
+  <tr><td>3</td><td>Entreprise reçoit RDV</td><td>1 — 0..N</td><td>rendez_vous.entreprise_id</td></tr>
+  <tr><td>4</td><td>User demande RDV</td><td>1 — 0..N</td><td>rendez_vous.demandeur_id</td></tr>
+  <tr><td>5</td><td>Entreprise organise Activités</td><td>1 — 0..N</td><td>activites.entreprise_id</td></tr>
+  <tr><td>6</td><td>User assigné à Activité</td><td>0..1 — 0..N</td><td>activites.assigne_a</td></tr>
+  <tr><td>7</td><td>Conversation contient Messages</td><td>1 — 1..N</td><td>messages.conversation_id</td></tr>
+  <tr><td>8</td><td>Entreprise reçoit Contact public</td><td>1 — 0..N</td><td>contact_public.entreprise_id</td></tr>
+</table>
+
+<p>Le modèle physique (MPD) correspond au script <span class="code">sql/schema.sql</span> : moteur InnoDB, encodage utf8mb4, index sur statuts, dates, rôles, et contraintes ON DELETE CASCADE ou SET NULL selon la sémantique métier (Date, 2003 ; MySQL Documentation, 2024).</p>
+
+<h2>3.7 Architecture technique</h2>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.9 ]</div>
+  <span class="fig-hint">Schéma : Navigateur → Apache (XAMPP) → branches pages/* (affichage), actions/* (POST), includes/* (auth, helpers) → MySQL (planipro). Ajouter public/css, public/js, uploads/.</span>
+  <div class="fig-caption">Figure 3.9 — Architecture technique de PLANIPRO</div>
+</div>
+
+<p><strong>Principes d'architecture retenus :</strong></p>
+<ol>
+  <li>Une page affiche ; une action traite et redirige (PRG).</li>
+  <li>Les requêtes SQL passent par PDO préparé.</li>
+  <li>Les sorties HTML sont échappées (<span class="code">e()</span>).</li>
+  <li>Les rôles isolent les données via <span class="code">entreprise_id</span> / <span class="code">demandeur_id</span> / <span class="code">assigne_a</span>.</li>
+  <li>Les fonctions transverses (auth, reminders, messaging) sont factorisées dans <span class="code">includes/</span>.</li>
+</ol>
+
+<p><strong>Organisation logique des répertoires :</strong></p>
+<pre>
+PLANIPRO/
+├── index.php                 # Accueil public
+├── config/database.php       # Connexion MySQL
+├── includes/                 # Init, auth, helpers, messagerie, rappels
+├── pages/                    # Interfaces par rôle
+├── actions/                  # Traitements POST
+├── public/                   # CSS, JS, assets
+├── sql/schema.sql            # Schéma
+└── uploads/                  # Logos entreprises
+</pre>
+
+<h2>3.8 Conception des interfaces</h2>
+
+<p>Les interfaces ont été pensées selon les heuristiques de Nielsen (1994) et une identité visuelle cohérente (charte CSS, typographie Poppins sur l'accueil public).</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.10 ]</div>
+  <span class="fig-hint">Maquette / wireframe de la page d'accueil : hero, liste des entreprises, CTA Connexion / Inscription, cloche notifications publiques.</span>
+  <div class="fig-caption">Figure 3.10 — Maquette de la page d'accueil publique</div>
+</div>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.11 ]</div>
+  <span class="fig-hint">Maquette tableau de bord entreprise : cartes KPI (RDV en attente, activités, messages), raccourcis modules.</span>
+  <div class="fig-caption">Figure 3.11 — Maquette du tableau de bord entreprise</div>
+</div>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.12 ]</div>
+  <span class="fig-hint">Maquette calendrier FullCalendar (vues mois/semaine/jour), légende couleurs RDV vs activités.</span>
+  <div class="fig-caption">Figure 3.12 — Maquette du calendrier interactif</div>
+</div>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.13 ]</div>
+  <span class="fig-hint">Maquette messagerie : liste des conversations à gauche, fil de messages à droite, zone de saisie.</span>
+  <div class="fig-caption">Figure 3.13 — Maquette de la messagerie</div>
+</div>
+
+<h2>3.9 Sécurité et règles de gestion</h2>
+
+<p class="table-caption">Tableau 3.5 — Règles de gestion métier (extrait)</p>
+<table>
+  <tr><th>ID</th><th>Règle</th></tr>
+  <tr><td>RG01</td><td>Seules les entreprises peuvent s'inscrire publiquement.</td></tr>
+  <tr><td>RG02</td><td>Clients, partenaires et visiteurs sont créés par l'entreprise de rattachement.</td></tr>
+  <tr><td>RG03</td><td>Un client/partenaire ne demande des RDV qu'à son entreprise.</td></tr>
+  <tr><td>RG04</td><td>Seule l'entreprise valide les transitions de statut des RDV reçus.</td></tr>
+  <tr><td>RG05</td><td>Un visiteur ne voit que ses RDV et activités assignées.</td></tr>
+  <tr><td>RG06</td><td>Une conversation 1–1 est unique pour une paire ordonnée d'utilisateurs.</td></tr>
+  <tr><td>RG07</td><td>Le suivi public repose sur un jeton stocké (cookie) sans exposer les données des autres.</td></tr>
+  <tr><td>RG08</td><td>Tout compte peut être désactivé (actif = 0) sans suppression physique immédiate.</td></tr>
+  <tr><td>RG09</td><td>Les mots de passe ne sont jamais stockés en clair.</td></tr>
+  <tr><td>RG10</td><td>Les actions POST sensibles exigent un jeton CSRF valide.</td></tr>
+</table>
+
+<p>Sur le plan sécurité applicative, la conception prévoit : <span class="code">password_hash</span> / <span class="code">password_verify</span>, sessions, <span class="code">require_login()</span> / <span class="code">require_role()</span>, échappement XSS, PDO, validation des URL externes (http/https uniquement), et masquage du mot de passe temporaire après lecture de la notification publique (OWASP, 2021).</p>
+
+<h2>3.4.2 Fiches de cas d'utilisation supplémentaires</h2>
+
+<p><strong>CU — Demander un rendez-vous (Client)</strong><br>
+Préconditions : client authentifié et rattaché à une entreprise.<br>
+Postconditions : RDV créé en <em>en_attente</em> ; notification entreprise.<br>
+Scénario : ouvrir formulaire → saisir titre, motif, dates, lieu → valider → confirmation à l'écran.<br>
+Exceptions : dates incohérentes (fin &lt; début) ; entreprise inactive.</p>
+
+<p><strong>CU — Créer une activité</strong><br>
+Acteur : Entreprise.<br>
+Scénario : saisir titre, description, priorité, échéance, assigné → enregistrer → activité visible dans la liste et, si échéance, au calendrier.<br>
+Variante : mise à jour de la progression par l'entreprise (et consultation par le visiteur).</p>
+
+<p><strong>CU — Contacter une entreprise (Public)</strong><br>
+Acteur : Internautes.<br>
+Scénario : choisir entreprise → formulaire nom/email/message → envoi → token public créé → possibilité de suivre les réponses.<br>
+Extension : l'entreprise crée un compte visiteur et notifie les identifiants.</p>
+
+<p><strong>CU — Consulter le calendrier</strong><br>
+Acteurs : Entreprise, Visiteur.<br>
+Scénario : ouvrir calendrier → choisir vue → cliquer un événement → détail / actions contextuelles.</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.14 ]</div>
+  <span class="fig-hint">Diagramme de cas d'utilisation — module Contact public &amp; Visiteurs.</span>
+  <div class="fig-caption">Figure 3.14 — CU Contact public et gestion des visiteurs</div>
+</div>
+
+
+<h2>3.6.4 Justification des choix de modélisation</h2>
+
+<p>Le choix de séparer <span class="code">users</span> des profils (<span class="code">entreprises</span>, <span class="code">clients</span>, <span class="code">partenaires</span>) respecte le principe de spécialisation : les attributs communs d'authentification ne sont pas dupliqués, tandis que les attributs métier restent dans des tables dédiées (Chen, 1976 ; Elmasri &amp; Navathe, 2015). Le rôle <span class="code">employe</span> (visiteur) n'a pas de table de profil séparée dans la version actuelle, ses attributs restant dans <span class="code">users</span> — simplification acceptable pour le périmètre, documentée comme limite évolutive.</p>
+
+<p>La table <span class="code">historique</span> matérialise un journal d'audit léger, utile à la traçabilité sans imposer un SI de type SIEM. Les tables de messagerie suivent un modèle classique 1–1 extensible ultérieurement vers des canaux de groupe.</p>
+
+
+<h2>3.7.1 Déploiement logique et physique</h2>
+
+<p>En environnement de développement, le déploiement est monolithique local (un serveur Apache, une base). En production future, on pourra séparer : serveur web, serveur de base de données, stockage fichiers (logos) sur volume dédié, et reverse proxy TLS (Nginx/Apache). Cette trajectoire est compatible avec une croissance progressive (Bass et al., 2012).</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 3.15 ]</div>
+  <span class="fig-hint">Schéma cible production : Navigateur — HTTPS — Reverse proxy — App PHP — MySQL — Volume uploads.</span>
+  <div class="fig-caption">Figure 3.15 — Architecture de déploiement cible (perspective)</div>
+</div>
+
+
+
+<h2>3.10 Conclusion du chapitre</h2>
+
+<p>L'analyse et la conception ont permis de spécifier un système multi-rôles cohérent, un modèle de données normalisé en douze tables principales, une architecture pages/actions claire et des interfaces ciblées. Ces modèles constituent le plan de construction mis en œuvre au chapitre IV.</p>
+
+<p class="center"><em>*** Fin du chapitre III ***</em></p>
+
+<!-- ============================================================ -->
+<!-- CHAPITRE IV -->
+<!-- ============================================================ -->
+<h1>CHAPITRE IV — IMPLÉMENTATION DU SYSTÈME PROPOSÉ</h1>
+
+<h2>4.1 Introduction</h2>
+
+<p>Ce chapitre décrit la réalisation concrète de PLANIPRO : environnement de développement, organisation du code, implémentation des modules, interfaces produites, tests de validation, difficultés rencontrées, limites et perspectives. Il s'agit de démontrer que la conception du chapitre III s'est traduite en un prototype fonctionnel (Brooks, 1995 ; McConnell, 2004).</p>
+
+<p>L'implémentation a suivi une approche itérative : d'abord le socle (base de données, authentification, layout), puis les modules métier par ordre de criticité (rendez-vous, activités, calendrier), ensuite les modules transverses (messagerie, notifications, contacts, rapports). Cette stratégie réduit le risque de livrer un système « beau mais vide » et permet de valider tôt les hypothèses fonctionnelles (Boehm, 1988 ; Larman, 2004).</p>
+
+<h2>4.2 Environnement de développement</h2>
+
+<p class="table-caption">Tableau 4.1 — Environnement logiciel utilisé</p>
+<table>
+  <tr><th>Composant</th><th>Outil / version</th><th>Rôle</th></tr>
+  <tr><td>Système</td><td>Windows 10</td><td>Poste de développement</td></tr>
+  <tr><td>Serveur web</td><td>Apache (XAMPP)</td><td>Hébergement local</td></tr>
+  <tr><td>SGBD</td><td>MySQL / MariaDB (XAMPP)</td><td>Persistance</td></tr>
+  <tr><td>Langage</td><td>PHP 8+</td><td>Logique serveur</td></tr>
+  <tr><td>Frontend</td><td>HTML5, CSS3, JavaScript</td><td>Interfaces</td></tr>
+  <tr><td>Calendrier</td><td>FullCalendar (CDN)</td><td>Vues planning</td></tr>
+  <tr><td>Éditeur</td><td>VS Code / Cursor / équivalent</td><td>Codage</td></tr>
+  <tr><td>Administration BDD</td><td>phpMyAdmin</td><td>Import schéma / seed</td></tr>
+  <tr><td>Navigateurs de test</td><td>Chrome, Edge, Firefox</td><td>Validation UI</td></tr>
+</table>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.12 ]</div>
+  <span class="fig-hint">Schéma de déploiement : Machine développeur → XAMPP (Apache + MySQL + PHP) → dossier htdocs/PLANIPRO → navigateur http://localhost/PLANIPRO/</span>
+  <div class="fig-caption">Figure 4.12 — Schéma de déploiement local (XAMPP)</div>
+</div>
+
+<h3>4.2.1 Procédure d'installation</h3>
+<ol>
+  <li>Placer le projet dans le répertoire <span class="code">htdocs/PLANIPRO</span>.</li>
+  <li>Démarrer Apache et MySQL via le panneau XAMPP.</li>
+  <li>Importer <span class="code">sql/schema.sql</span> puis, pour la démo, <span class="code">sql/seed.sql</span>.</li>
+  <li>Configurer si besoin <span class="code">config/database.php</span> (hôte, utilisateur, mot de passe — par défaut root sans mot de passe sous XAMPP).</li>
+  <li>Accéder à <span class="code">http://localhost/PLANIPRO/</span>.</li>
+</ol>
+
+<p>Cette procédure, volontairement simple, favorise la reproductibilité pédagogique et le déploiement chez une PME disposant d'un serveur local ou d'un hébergement PHP mutualisé (Welling &amp; Thomson, 2016).</p>
+
+<h2>4.3 Organisation du code source</h2>
+
+<p class="table-caption">Tableau 4.2 — Structure des répertoires du projet</p>
+<table>
+  <tr><th>Répertoire / fichier</th><th>Responsabilité</th></tr>
+  <tr><td><span class="code">index.php</span></td><td>Accueil public, liste des entreprises</td></tr>
+  <tr><td><span class="code">config/</span></td><td>Paramètres de connexion BDD</td></tr>
+  <tr><td><span class="code">includes/</span></td><td>Initialisation, auth, helpers, messagerie, rappels, PDF</td></tr>
+  <tr><td><span class="code">pages/auth/</span></td><td>Login, register</td></tr>
+  <tr><td><span class="code">pages/entreprise/</span></td><td>Espace entreprise (RDV, activités, contacts…)</td></tr>
+  <tr><td><span class="code">pages/employe/</span></td><td>Espace visiteur</td></tr>
+  <tr><td><span class="code">pages/client/</span>, <span class="code">pages/partenaire/</span></td><td>Espaces demandeurs</td></tr>
+  <tr><td><span class="code">pages/messagerie/</span></td><td>Conversations</td></tr>
+  <tr><td><span class="code">pages/public/</span></td><td>Contact et notifications publiques</td></tr>
+  <tr><td><span class="code">actions/</span></td><td>Traitements POST (CRUD, auth, RDV…)</td></tr>
+  <tr><td><span class="code">public/css|js/</span></td><td>Assets front</td></tr>
+  <tr><td><span class="code">sql/</span></td><td>Schéma et scripts d'évolution</td></tr>
+  <tr><td><span class="code">uploads/</span></td><td>Logos entreprises</td></tr>
+  <tr><td><span class="code">docs/</span></td><td>Documentation de conception</td></tr>
+</table>
+
+<p>Cette organisation favorise la séparation des responsabilités et la maintenance (Martin, 2017 ; Fowler, 2002). Le pattern « page affiche / action traite / redirect » (PRG) limite les doubles soumissions et clarifie le flux HTTP.</p>
+
+<h3>4.3.1 Fichiers pivots</h3>
+<ul>
+  <li><span class="code">includes/init.php</span> : démarrage session, chargement config, helpers.</li>
+  <li><span class="code">includes/auth.php</span> : login, rôles, guards d'accès.</li>
+  <li><span class="code">includes/helpers.php</span> : utilitaires (échappement, URLs, flash messages…).</li>
+  <li><span class="code">includes/messaging.php</span> : conversations et messages.</li>
+  <li><span class="code">includes/reminders.php</span> : rappels automatiques de RDV.</li>
+  <li><span class="code">includes/header.php</span> / <span class="code">footer.php</span> : layout commun des espaces connectés.</li>
+</ul>
+
+<h2>4.4 Implémentation de l'authentification</h2>
+
+<p>L'authentification repose sur des sessions PHP. Après vérification de l'e-mail et du mot de passe (<span class="code">password_verify</span>), le système stocke l'utilisateur courant et redirige vers l'accueil de son rôle (<span class="code">role_home()</span>). Les pages sensibles appellent <span class="code">require_login()</span> et éventuellement <span class="code">require_role()</span>.</p>
+
+<p>L'inscription publique crée simultanément un enregistrement <span class="code">users</span> (rôle entreprise) et une fiche <span class="code">entreprises</span>. Les autres rôles sont créés depuis l'espace entreprise (contacts / visiteurs), ce qui garantit le rattachement organisationnel et évite les comptes « orphelins ».</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.2 ]</div>
+  <span class="fig-hint">Capture d'écran réelle : formulaire d'inscription entreprise (raison sociale, email, mot de passe, etc.).</span>
+  <div class="fig-caption">Figure 4.2 — Inscription entreprise</div>
+</div>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.3 ]</div>
+  <span class="fig-hint">Capture d'écran réelle : page de connexion unifiée.</span>
+  <div class="fig-caption">Figure 4.3 — Connexion</div>
+</div>
+
+<p>La protection CSRF est implémentée via un jeton généré côté session et vérifié sur chaque action POST. Les sorties utilisent une fonction d'échappement HTML pour limiter les risques XSS. Les mots de passe sont hashés avec l'algorithme recommandé par PHP (bcrypt via <span class="code">password_hash</span>) (Provos &amp; Mazières, 1999 ; OWASP, 2021 ; PHP Manual, 2024).</p>
+
+<h3>4.4.1 Comptes de démonstration</h3>
+<p>Pour faciliter les tests et la soutenance, des comptes seed sont fournis (mot de passe commun : <span class="code">password</span>) : entreprise@planipro.local, employe@planipro.local, client@planipro.local, partenaire@planipro.local.</p>
+
+<h2>4.5 Modules métier</h2>
+
+<h3>4.5.1 Module Rendez-vous</h3>
+<p>Le module couvre la création (entreprise ou demandeurs), le listing avec filtres, et les actions de cycle de vie (<span class="code">actions/rdv_action.php</span>, <span class="code">rdv_demande.php</span>, <span class="code">rdv_entreprise_save.php</span>). Chaque transition peut produire une notification et une entrée d'historique. Un raccourci permet d'ouvrir la messagerie avec le demandeur.</p>
+<p>Les statuts implémentés sont : <em>en_attente</em>, <em>accepte</em>, <em>refuse</em>, <em>reporte</em>, <em>annule</em>, <em>termine</em>. Cette formalisation répond directement à l'hypothèse H1 et au besoin BF03.</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.5 ]</div>
+  <span class="fig-hint">Capture : liste des rendez-vous entreprise avec badges de statut (couleurs) et boutons Accepter / Refuser / Reporter / Annuler / Terminer.</span>
+  <div class="fig-caption">Figure 4.5 — Gestion des rendez-vous</div>
+</div>
+
+<h3>4.5.2 Module Activités</h3>
+<p>Les activités sont créées/éditées par l'entreprise (<span class="code">activite_save.php</span>), assignables à un visiteur, avec priorité (basse → urgente), statut (à faire → terminée), progression (0–100 %) et échéance. Le visiteur consulte ses activités dans son espace. Les échéances alimentent le calendrier via l'API d'événements.</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.6 ]</div>
+  <span class="fig-hint">Capture : formulaire d'ajout / édition d'activité (titre, description, priorité, assignation, progression, échéance).</span>
+  <div class="fig-caption">Figure 4.6 — Formulaire d'activité</div>
+</div>
+
+<h3>4.5.3 Module Calendrier</h3>
+<p>FullCalendar consomme un endpoint JSON (<span class="code">actions/calendrier_events.php</span>) qui agrège RDV et activités. Les vues mois / semaine / jour / liste et le mode responsive (liste sur mobile) améliorent l'accessibilité du planning (FullCalendar Docs, 2024 ; Nielsen, 1994).</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.7 ]</div>
+  <span class="fig-hint">Capture : calendrier vue mois avec événements colorés (légende RDV vs activités).</span>
+  <div class="fig-caption">Figure 4.7 — Calendrier (vue mois)</div>
+</div>
+
+<h3>4.5.4 Module Contacts et visiteurs</h3>
+<p>L'entreprise gère clients et partenaires (<span class="code">pages/entreprise/contacts.php</span>) ainsi que les visiteurs (<span class="code">employes.php</span>). La conversion d'un contact public en compte visiteur — avec notification des identifiants — constitue un flux différenciant du système par rapport aux agendas classiques.</p>
+
+<h3>4.5.5 Module Messagerie</h3>
+<p>Les conversations sont uniques par paire d'utilisateurs (contrainte UNIQUE sur participant_a / participant_b, avec ordonnancement des identifiants). L'envoi de messages met à jour <span class="code">last_message_at</span> et le statut de lecture. Des règles métier limitent les interlocuteurs autorisés (même entreprise, écriture vers entreprise, réponse aux contacts liés).</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.8 ]</div>
+  <span class="fig-hint">Capture : interface messagerie (liste des conversations à gauche, fil à droite, zone de saisie).</span>
+  <div class="fig-caption">Figure 4.8 — Messagerie intégrée</div>
+</div>
+
+<h3>4.5.6 Notifications et rappels</h3>
+<p>Les notifications in-app alimentent une cloche dans l'interface connectée. Le module de rappels (<span class="code">includes/reminders.php</span>) signale les RDV dans les 24 heures. Les notifications publiques s'appuient sur un token et un cookie <span class="code">planipro_public</span>, permettant un suivi sans imposer immédiatement la création d'un compte.</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.11 ]</div>
+  <span class="fig-hint">Capture : page des notifications publiques pour visiteur non connecté.</span>
+  <div class="fig-caption">Figure 4.11 — Notifications publiques</div>
+</div>
+
+<h3>4.5.7 Rapports</h3>
+<p>L'espace entreprise propose des synthèses et un export PDF / impression (<span class="code">actions/rapport_export.php</span>, helper <span class="code">SimplePdf.php</span>), répondant au besoin de pilotage tactique (Laudon &amp; Laudon, 2020 ; Kaplan &amp; Norton, 1996).</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.9 ]</div>
+  <span class="fig-hint">Capture : écran rapports + aperçu / téléchargement PDF.</span>
+  <div class="fig-caption">Figure 4.9 — Rapports / export PDF</div>
+</div>
+
+<h3>4.5.8 Accueil public et contact</h3>
+<p>La page d'accueil présente la marque PLANIPRO, les fonctionnalités, et la liste searchable des entreprises. Un internaute peut contacter une entreprise (<span class="code">pages/public/contacter.php</span>) sans créer de compte, ce qui abaisse la barrière d'entrée (Davis, 1989).</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.1 ]</div>
+  <span class="fig-hint">Capture pleine page : accueil PLANIPRO (hero slider + section entreprises + CTA).</span>
+  <div class="fig-caption">Figure 4.1 — Page d'accueil PLANIPRO</div>
+</div>
+
+<h2>4.6 Interfaces utilisateur réalisées</h2>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.4 ]</div>
+  <span class="fig-hint">Capture : tableau de bord entreprise (indicateurs RDV, activités, messages, raccourcis).</span>
+  <div class="fig-caption">Figure 4.4 — Tableau de bord entreprise</div>
+</div>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.10 ]</div>
+  <span class="fig-hint">Capture : espace client (demande de RDV, historique, profil).</span>
+  <div class="fig-caption">Figure 4.10 — Espace client</div>
+</div>
+
+<p>L'interface respecte une navigation par rôle : chaque type d'utilisateur dispose d'un menu adapté, réduisant la charge cognitive et les erreurs de parcours (Sweller, 1988 ; Norman, 2013 ; Shneiderman et al., 2016). Le CSS centralisé (<span class="code">public/css/style.css</span>) assure une cohérence visuelle entre les espaces.</p>
+
+<h2>4.7 Tests et validation</h2>
+
+<p>Les tests réalisés sont principalement fonctionnels (boîte noire) et de non-régression manuelle (Kaner et al., 1999 ; ISTQB, 2019). Une grille de scénarios a été exécutée après chaque itération majeure.</p>
+
+<p class="table-caption">Tableau 4.3 — Scénarios de test et résultats (extrait)</p>
+<table>
+  <tr><th>ID</th><th>Scénario</th><th>Résultat attendu</th><th>Statut</th></tr>
+  <tr><td>T01</td><td>Inscription entreprise valide</td><td>Compte + fiche créés, redirection</td><td>OK</td></tr>
+  <tr><td>T02</td><td>Connexion mauvais mot de passe</td><td>Message d'erreur, pas de session</td><td>OK</td></tr>
+  <tr><td>T03</td><td>Client demande un RDV</td><td>Statut en_attente + notif entreprise</td><td>OK</td></tr>
+  <tr><td>T04</td><td>Entreprise accepte le RDV</td><td>Statut accepte + notif client + calendrier</td><td>OK</td></tr>
+  <tr><td>T05</td><td>Report d'un RDV</td><td>Nouvelles dates + statut reporte</td><td>OK</td></tr>
+  <tr><td>T06</td><td>Création activité assignée</td><td>Visible côté visiteur</td><td>OK</td></tr>
+  <tr><td>T07</td><td>Accès client aux données d'une autre entreprise</td><td>Refus / isolation</td><td>OK</td></tr>
+  <tr><td>T08</td><td>POST sans jeton CSRF</td><td>Rejet de la requête</td><td>OK</td></tr>
+  <tr><td>T09</td><td>Contact public + notification</td><td>Message suivi via token</td><td>OK</td></tr>
+  <tr><td>T10</td><td>Export rapport PDF</td><td>Fichier / impression générés</td><td>OK</td></tr>
+  <tr><td>T11</td><td>Calendrier mobile (vue liste)</td><td>Affichage lisible</td><td>OK</td></tr>
+  <tr><td>T12</td><td>Désactivation d'un contact</td><td>Accès restreint</td><td>OK</td></tr>
+  <tr><td>T13</td><td>Messagerie depuis un RDV</td><td>Conversation ouverte avec le bon destinataire</td><td>OK</td></tr>
+  <tr><td>T14</td><td>Rappel RDV &lt; 24 h</td><td>Notification de type rappel</td><td>OK</td></tr>
+</table>
+
+<p class="table-caption">Tableau 4.4 — Couverture fonctionnelle réalisée</p>
+<table>
+  <tr><th>Module</th><th>Conçu</th><th>Implémenté</th><th>Testé</th></tr>
+  <tr><td>Authentification</td><td>✓</td><td>✓</td><td>✓</td></tr>
+  <tr><td>Rendez-vous</td><td>✓</td><td>✓</td><td>✓</td></tr>
+  <tr><td>Activités</td><td>✓</td><td>✓</td><td>✓</td></tr>
+  <tr><td>Calendrier</td><td>✓</td><td>✓</td><td>✓</td></tr>
+  <tr><td>Contacts / visiteurs</td><td>✓</td><td>✓</td><td>✓</td></tr>
+  <tr><td>Messagerie</td><td>✓</td><td>✓</td><td>✓</td></tr>
+  <tr><td>Notifications</td><td>✓</td><td>✓</td><td>✓</td></tr>
+  <tr><td>Rapports</td><td>✓</td><td>✓</td><td>✓</td></tr>
+  <tr><td>Contact public</td><td>✓</td><td>✓</td><td>✓</td></tr>
+</table>
+
+<p>Les hypothèses H1 à H4 formulées en introduction trouvent ainsi une validation qualitative : le workflow de RDV clarifie les états (H1), les activités offrent un suivi opérationnel (H2), messagerie et notifications réduisent les pertes d'information (H3), authentification et isolation protègent les données (H4). Une validation quantitative longitudinale (avant/après en entreprise réelle) demeure une perspective de recherche empirique (Hevner et al., 2004 ; Yin, 2018).</p>
+
+<h2>4.8 Difficultés rencontrées et solutions</h2>
+<ul>
+  <li><strong>Gestion des rôles et de l'isolation multi-entreprises :</strong> filtres SQL systématiques sur <span class="code">entreprise_id</span> et contrôles <span class="code">require_role()</span>.</li>
+  <li><strong>Cycle de vie des RDV :</strong> formalisation explicite des transitions pour éviter les états incohérents.</li>
+  <li><strong>Suivi des visiteurs publics sans compte :</strong> couple <span class="code">public_token</span> / cookie / table <span class="code">notifications_publiques</span>.</li>
+  <li><strong>Calendrier unifié :</strong> agrégation RDV + activités dans une API JSON unique consommée par FullCalendar.</li>
+  <li><strong>Export PDF léger :</strong> génération simplifiée (<span class="code">SimplePdf</span>) sans dépendance Composer lourde.</li>
+  <li><strong>Encodage des caractères :</strong> harmonisation UTF-8 / utf8mb4 sur PHP, HTML et MySQL.</li>
+  <li><strong>UX mobile :</strong> adaptation du calendrier en vue liste pour les petits écrans.</li>
+</ul>
+
+<h2>4.9 Limites et perspectives</h2>
+
+<p><strong>Limites actuelles :</strong></p>
+<ul>
+  <li>absence d'envoi e-mail SMTP robuste pour la réinitialisation de mot de passe ;</li>
+  <li>pas de pièces jointes en messagerie ;</li>
+  <li>pas de gestion fine des disponibilités / créneaux bloqués anti-conflit automatique ;</li>
+  <li>pas d'API REST publique documentée pour mobile ;</li>
+  <li>scripts SQL d'évolution encore partiels (non versionnés type Flyway/Laravel migrations) ;</li>
+  <li>déploiement limité à un contexte de démonstration locale dans le cadre de ce mémoire.</li>
+</ul>
+
+<p><strong>Perspectives d'évolution :</strong></p>
+<ul>
+  <li>réinitialisation de mot de passe par e-mail (jeton à usage unique, expiration) ;</li>
+  <li>pièces jointes et notifications push / e-mail ;</li>
+  <li>disponibilités et prévention avancée des conflits de créneaux (Pinedo, 2016) ;</li>
+  <li>API REST pour clients mobiles (Fielding, 2000) ;</li>
+  <li>migrations SQL versionnées ;</li>
+  <li>tableaux de bord analytiques enrichis (taux d'acceptation, délais moyens, charge par visiteur) ;</li>
+  <li>déploiement sur serveur Linux mutualisé ou VPS avec HTTPS (TLS) ;</li>
+  <li>internationalisation (i18n) et accessibilité WCAG renforcée.</li>
+</ul>
+
+<h2>4.5.9 Paramètres et profils</h2>
+
+<p>Chaque rôle peut mettre à jour son profil (nom, téléphone, mot de passe). L'entreprise enrichit sa fiche (raison sociale, adresse, secteur, description, site web, logo). Ces écrans, souvent négligés, sont essentiels à la confiance et à la présentation publique de l'organisation (Norman, 2013).</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.13 ]</div>
+  <span class="fig-hint">Capture : page paramètres / profil entreprise avec logo.</span>
+  <div class="fig-caption">Figure 4.13 — Paramètres et fiche entreprise</div>
+</div>
+
+
+<h2>4.7.1 Stratégie de test adoptée</h2>
+
+<p>Nous avons combiné :</p>
+<ul>
+  <li><strong>tests d'authentification</strong> (heureux / malheureux) ;</li>
+  <li><strong>tests de parcours métier</strong> (bout en bout : demande → validation → calendrier) ;</li>
+  <li><strong>tests d'autorisation</strong> (tentative d'accès transversal entre entreprises) ;</li>
+  <li><strong>tests d'interface</strong> (responsive, messages flash, formulaires) ;</li>
+  <li><strong>tests de non-régression</strong> après chaque correctif majeur.</li>
+</ul>
+<p>Cette stratégie, sans automatisation Selenium complète, reste alignée avec les pratiques ISTQB Foundation pour un projet de taille modérée (ISTQB, 2019).</p>
+
+
+<h2>4.8.1 Leçons apprises</h2>
+<ul>
+  <li>Investir tôt dans le modèle de données évite des refontes coûteuses.</li>
+  <li>Le multi-rôles doit être pensé dès les cas d'utilisation, pas ajouté après coup.</li>
+  <li>Les flux « public → compte » sont délicats : sécurité et UX doivent cohabiter.</li>
+  <li>Documenter (CONCEPTION.md) en parallèle du code accélère la rédaction du mémoire et la maintenance.</li>
+  <li>Un calendrier unifié a plus de valeur perçue que des listes séparées pour l'utilisateur final.</li>
+</ul>
+
+<p>Ces leçons rejoignent les constats classiques du génie logiciel sur le coût de la correction tardive des défauts d'analyse (Boehm, 1981 ; Pressman &amp; Maxim, 2019).</p>
+
+
+
+<h2>4.9.1 Recommandations pour la mise en production</h2>
+<p>Avant un déploiement en entreprise réelle, nous recommandons les actions suivantes (Bass et al., 2012 ; OWASP, 2021 ; NIST, 2024) :</p>
+<ol>
+  <li><strong>Activer HTTPS</strong> (certificat Let's Encrypt ou équivalent) afin de chiffrer les sessions et formulaires.</li>
+  <li><strong>Changer les secrets par défaut</strong> : mot de passe MySQL fort, désactivation des comptes seed, politique de mot de passe utilisateur.</li>
+  <li><strong>Sauvegardes périodiques</strong> de la base <span class="code">planipro</span> et du répertoire <span class="code">uploads/</span>.</li>
+  <li><strong>Journalisation</strong> des erreurs PHP et supervision de l'espace disque.</li>
+  <li><strong>Formation courte</strong> des utilisateurs (entreprise et visiteurs) sur le cycle de vie des RDV et la messagerie.</li>
+  <li><strong>Recette utilisateur (UAT)</strong> sur un échantillon réel de rendez-vous pendant 2 à 4 semaines.</li>
+  <li><strong>Plan de continuité</strong> : procédure de restauration et contacts support.</li>
+</ol>
+<p>Ces recommandations relient la réussite technique à la réussite organisationnelle, conformément aux travaux sur l'implémentation des SI (Markus, 1983 ; DeLone &amp; McLean, 2003 ; Lyytinen &amp; Hirschheim, 1987).</p>
+
+
+
+<h2>Synthèse comparative des apports du système</h2>
+<p>Pour conclure l'implémentation sous un angle managérial, le tableau suivant synthétise le passage de la situation initiale à la situation cible (as-is → to-be), critère par critère.</p>
+<table>
+  <tr><th>Critère</th><th>Situation initiale (as-is)</th><th>Situation cible avec PLANIPRO (to-be)</th></tr>
+  <tr><td>Support de planification</td><td>Agenda papier / outils personnels</td><td>Plateforme web centralisée</td></tr>
+  <tr><td>Statut des RDV</td><td>Implicite / oral</td><td>Workflow explicite à 6 états</td></tr>
+  <tr><td>Activités internes</td><td>Post-it / Excel dispersé</td><td>Activités assignées + progression</td></tr>
+  <tr><td>Communication</td><td>WhatsApp / téléphone perso</td><td>Messagerie + notifications in-app</td></tr>
+  <tr><td>Entrée des prospects</td><td>Non tracée</td><td>Contact public + token de suivi</td></tr>
+  <tr><td>Pilotage</td><td>Faible / intuitif</td><td>Tableau de bord + rapports PDF</td></tr>
+  <tr><td>Sécurité des accès</td><td>Faible (canaux ouverts)</td><td>Rôles, sessions, CSRF, hash</td></tr>
+  <tr><td>Mémoire organisationnelle</td><td>Fragile</td><td>Historique et base relationnelle</td></tr>
+</table>
+<p class="table-caption">Tableau 4.5 — Passage as-is → to-be grâce à PLANIPRO</p>
+<p>Ce tableau opérationnalise la proposition de valeur du système et peut servir de support de communication lors de la soutenance ou d'une présentation à une direction d'entreprise (Kaplan &amp; Norton, 1996 ; Porter, 1985).</p>
+
+<div class="figure-slot">
+  <div class="fig-label">[ EMPLACEMENT FIGURE 4.14 ]</div>
+  <span class="fig-hint">Infographie avant/après (deux colonnes) résumant le tableau 4.5 — utile en soutenance.</span>
+  <div class="fig-caption">Figure 4.14 — Infographie as-is / to-be</div>
+</div>
+
+<p>Enfin, soulignons que la valeur d'un SI se révèle dans la durée : la qualité des données saisies, la discipline d'usage et l'amélioration continue des processus conditionnent le retour sur investissement (DeLone &amp; McLean, 2003 ; Seddon, 1997). PLANIPRO fournit l'infrastructure ; l'organisation fournit la pratique.</p>
+
+<h2>4.10 Conclusion du chapitre</h2>
+
+<p>L'implémentation a permis d'obtenir un prototype cohérent avec la conception : stack PHP/MySQL, modules métier couverts, interfaces par rôle, mécanismes de sécurité de base et tests fonctionnels concluants. Les limites identifiées ouvrent des voies d'amélioration réalistes pour une industrialisation progressive du système PLANIPRO.</p>
+
+<p class="center"><em>*** Fin du chapitre IV ***</em></p>
+
+<!-- ============================================================ -->
+<!-- CONCLUSION GÉNÉRALE -->
+<!-- ============================================================ -->
+<h1>CONCLUSION GÉNÉRALE ET PERSPECTIVES</h1>
+
+<p>Au terme de ce mémoire, nous pouvons revenir à la problématique initiale : comment concevoir et réaliser une application web permettant à une entreprise de centraliser la gestion de ses rendez-vous, de ses activités et de ses échanges avec clients, partenaires et visiteurs, tout en garantissant traçabilité, sécurité et simplicité d'usage ?</p>
+
+<p>Le <strong>chapitre I</strong> a fourni le socle théorique : systèmes d'information, planification, applications web, bases relationnelles, sécurité et génie logiciel. Le <strong>chapitre II</strong> a montré que l'existant — agendas dispersés, tableurs, canaux informels — engendre fragmentation et perte d'information, et que les outils du marché ne couvrent que partiellement le besoin intégré d'une PME. Le <strong>chapitre III</strong> a spécifié et modélisé PLANIPRO (acteurs, cas d'utilisation, MCD/MLD, architecture, interfaces, règles de gestion). Le <strong>chapitre IV</strong> a décrit l'implémentation effective et sa validation par tests.</p>
+
+<p>Les objectifs spécifiques ont été atteints : cadre théorique élaboré, diagnostic posé, besoins formalisés, conception réalisée, prototype implémenté et testé. Les hypothèses trouvent un appui qualitatif dans le fonctionnement du système : formalisation du cycle de vie des RDV, suivi des activités, communication intégrée, sécurisation de base des accès.</p>
+
+<p>Sur le plan scientifique, ce travail s'inscrit dans la tradition du design science en systèmes d'information (Hevner et al., 2004) : produire un artefact utile (PLANIPRO), ancré dans un corpus théorique, évalué par des scénarios de test. Sur le plan pratique, il offre aux PME un modèle déployable et documenté. Sur le plan pédagogique, il synthétise l'analyse, la conception et le développement web.</p>
+
+<p>Ce mémoire ne prétend pas épuiser le sujet. Il constitue une contribution appliquée à la digitalisation de la planification. Les perspectives évoquées — e-mail transactionnel, API mobile, disponibilités avancées, analytique, HTTPS en production — dessinent une feuille de route claire. Nous espérons que PLANIPRO pourra servir de base à des déploiements réels et à de futures recherches sur les SI de planification pour les organisations africaines et émergentes (ITU, 2023 ; Banque mondiale, 2021).</p>
+
+<p class="center" style="margin-top:2em;"><em>*** Fin de la conclusion générale ***</em></p>
+
+
+<!-- ============================================================ -->
+<!-- BIBLIOGRAPHIE -->
+<!-- ============================================================ -->
+<h1>BIBLIOGRAPHIE ET WEBOGRAPHIE</h1>
+
+<p class="no-indent"><em>Les références sont présentées par ordre alphabétique d'auteurs. Style inspiré de APA (7<sup>e</sup> éd.), adapté au contexte francophone.</em></p>
+
+<h2>A. Ouvrages et monographies</h2>
+
+<p class="ref">Allen, D. (2015). <em>Getting Things Done: The Art of Stress-Free Productivity</em> (éd. révisée). Penguin Books.</p>
+<p class="ref">Alter, S. (2006). <em>The Work System Method</em>. Work System Press.</p>
+<p class="ref">Anderson, D. J. (2010). <em>Kanban: Successful Evolutionary Change for Your Technology Business</em>. Blue Hole Press.</p>
+<p class="ref">Anderson, R. (2020). <em>Security Engineering: A Guide to Building Dependable Distributed Systems</em> (3<sup>e</sup> éd.). Wiley.</p>
+<p class="ref">Anthony, R. N. (1965). <em>Planning and Control Systems: A Framework for Analysis</em>. Harvard Business School Press.</p>
+<p class="ref">Avison, D., &amp; Fitzgerald, G. (2006). <em>Information Systems Development: Methodologies, Techniques and Tools</em> (4<sup>e</sup> éd.). McGraw-Hill.</p>
+<p class="ref">Bass, L., Clements, P., &amp; Kazman, R. (2012). <em>Software Architecture in Practice</em> (3<sup>e</sup> éd.). Addison-Wesley.</p>
+<p class="ref">Booch, G., Rumbaugh, J., &amp; Jacobson, I. (2005). <em>The Unified Modeling Language User Guide</em> (2<sup>e</sup> éd.). Addison-Wesley.</p>
+<p class="ref">Brooks, F. P. (1995). <em>The Mythical Man-Month</em> (éd. anniversaire). Addison-Wesley.</p>
+<p class="ref">Cadle, J., Paul, D., &amp; Turner, P. (2014). <em>Business Analysis Techniques</em> (2<sup>e</sup> éd.). BCS.</p>
+<p class="ref">Checkland, P., &amp; Holwell, S. (1998). <em>Information, Systems and Information Systems</em>. Wiley.</p>
+<p class="ref">Cockburn, A. (2000). <em>Writing Effective Use Cases</em>. Addison-Wesley.</p>
+<p class="ref">Conallen, J. (2002). <em>Building Web Applications with UML</em> (2<sup>e</sup> éd.). Addison-Wesley.</p>
+<p class="ref">Connolly, T., &amp; Begg, C. (2014). <em>Database Systems</em> (6<sup>e</sup> éd.). Pearson.</p>
+<p class="ref">Covey, S. R. (2004). <em>The 7 Habits of Highly Effective People</em>. Free Press.</p>
+<p class="ref">Date, C. J. (2003). <em>An Introduction to Database Systems</em> (8<sup>e</sup> éd.). Addison-Wesley.</p>
+<p class="ref">Davenport, T. H. (1993). <em>Process Innovation</em>. Harvard Business School Press.</p>
+<p class="ref">Davis, G. B., &amp; Olson, M. H. (1985). <em>Management Information Systems</em> (2<sup>e</sup> éd.). McGraw-Hill.</p>
+<p class="ref">DeMarco, T. (1979). <em>Structured Analysis and System Specification</em>. Yourdon Press.</p>
+<p class="ref">Dennis, A., Wixom, B. H., &amp; Tegarden, D. (2015). <em>Systems Analysis and Design with UML</em> (5<sup>e</sup> éd.). Wiley.</p>
+<p class="ref">Drucker, P. F. (2006). <em>The Effective Executive</em>. HarperBusiness.</p>
+<p class="ref">Elmasri, R., &amp; Navathe, S. B. (2015). <em>Fundamentals of Database Systems</em> (7<sup>e</sup> éd.). Pearson.</p>
+<p class="ref">Fowler, M. (2002). <em>Patterns of Enterprise Application Architecture</em>. Addison-Wesley.</p>
+<p class="ref">Fowler, M. (2018). <em>Refactoring</em> (2<sup>e</sup> éd.). Addison-Wesley.</p>
+<p class="ref">Gabay, J., &amp; Gabay, D. (2008). <em>Merise et UML</em>. Dunod.</p>
+<p class="ref">Gamma, E., Helm, R., Johnson, R., &amp; Vlissides, J. (1995). <em>Design Patterns</em>. Addison-Wesley.</p>
+<p class="ref">Hammer, M., &amp; Champy, J. (2003). <em>Reengineering the Corporation</em> (éd. révisée). HarperBusiness.</p>
+<p class="ref">Hoffer, J. A., George, J., &amp; Valacich, J. (2016). <em>Modern Systems Analysis and Design</em> (8<sup>e</sup> éd.). Pearson.</p>
+<p class="ref">Jacobson, I., Booch, G., &amp; Rumbaugh, J. (1999). <em>The Unified Software Development Process</em>. Addison-Wesley.</p>
+<p class="ref">Kaner, C., Falk, J., &amp; Nguyen, H. Q. (1999). <em>Testing Computer Software</em> (2<sup>e</sup> éd.). Wiley.</p>
+<p class="ref">Kaplan, R. S., &amp; Norton, D. P. (1996). <em>The Balanced Scorecard</em>. Harvard Business School Press.</p>
+<p class="ref">Kendall, K. E., &amp; Kendall, J. E. (2013). <em>Systems Analysis and Design</em> (9<sup>e</sup> éd.). Pearson.</p>
+<p class="ref">Kerzner, H. (2017). <em>Project Management</em> (12<sup>e</sup> éd.). Wiley.</p>
+<p class="ref">Kniberg, H. (2011). <em>Lean from the Trenches</em>. Pragmatic Bookshelf.</p>
+<p class="ref">Kotler, P., &amp; Keller, K. L. (2015). <em>Marketing Management</em> (15<sup>e</sup> éd.). Pearson.</p>
+<p class="ref">Kruchten, P. (2003). <em>The Rational Unified Process</em> (3<sup>e</sup> éd.). Addison-Wesley.</p>
+<p class="ref">Larman, C. (2004). <em>Agile and Iterative Development</em>. Addison-Wesley.</p>
+<p class="ref">Laudon, K. C., &amp; Laudon, J. P. (2020). <em>Management Information Systems</em> (16<sup>e</sup> éd.). Pearson.</p>
+<p class="ref">Le Moigne, J.-L. (1990). <em>La modélisation des systèmes complexes</em>. Dunod.</p>
+<p class="ref">Martin, R. C. (2008). <em>Clean Code</em>. Prentice Hall.</p>
+<p class="ref">Martin, R. C. (2017). <em>Clean Architecture</em>. Prentice Hall.</p>
+<p class="ref">McConnell, S. (2004). <em>Code Complete</em> (2<sup>e</sup> éd.). Microsoft Press.</p>
+<p class="ref">Miles, M. B., Huberman, A. M., &amp; Saldaña, J. (2014). <em>Qualitative Data Analysis</em> (3<sup>e</sup> éd.). Sage.</p>
+<p class="ref">Mintzberg, H. (1994). <em>The Rise and Fall of Strategic Planning</em>. Free Press.</p>
+<p class="ref">Morley, C., Hugues, J., Leblanc, B., &amp; Hugues, O. (2011). <em>Processus métier et systèmes d'information</em>. Dunod.</p>
+<p class="ref">Nanci, D., &amp; Espinasse, B. (2001). <em>Ingénierie des systèmes d'information : Merise</em>. Vuibert.</p>
+<p class="ref">Newport, C. (2016). <em>Deep Work</em>. Grand Central Publishing.</p>
+<p class="ref">Nielsen, J. (1994). <em>Usability Engineering</em>. Morgan Kaufmann.</p>
+<p class="ref">Nixon, R. (2021). <em>Learning PHP, MySQL &amp; JavaScript</em> (6<sup>e</sup> éd.). O'Reilly Media.</p>
+<p class="ref">Nonaka, I., &amp; Takeuchi, H. (1995). <em>The Knowledge-Creating Company</em>. Oxford University Press.</p>
+<p class="ref">Norman, D. A. (2013). <em>The Design of Everyday Things</em> (éd. révisée). Basic Books.</p>
+<p class="ref">O'Brien, J. A., &amp; Marakas, G. M. (2011). <em>Management Information Systems</em> (10<sup>e</sup> éd.). McGraw-Hill.</p>
+<p class="ref">Pearlson, K. E., Saunders, C. S., &amp; Galletta, D. F. (2019). <em>Managing and Using Information Systems</em> (7<sup>e</sup> éd.). Wiley.</p>
+<p class="ref">Pinedo, M. L. (2016). <em>Scheduling: Theory, Algorithms, and Systems</em> (5<sup>e</sup> éd.). Springer.</p>
+<p class="ref">PMI. (2021). <em>PMBOK Guide</em> (7<sup>e</sup> éd.). Project Management Institute.</p>
+<p class="ref">Porter, M. E. (1985). <em>Competitive Advantage</em>. Free Press.</p>
+<p class="ref">Preece, J., Rogers, Y., &amp; Sharp, H. (2015). <em>Interaction Design</em> (4<sup>e</sup> éd.). Wiley.</p>
+<p class="ref">Pressman, R. S., &amp; Maxim, B. R. (2019). <em>Software Engineering: A Practitioner's Approach</em> (9<sup>e</sup> éd.). McGraw-Hill.</p>
+<p class="ref">Reix, R. (2004). <em>Systèmes d'information et management des organisations</em> (5<sup>e</sup> éd.). Vuibert.</p>
+<p class="ref">Reix, R., Fallery, B., Kalika, M., &amp; Rowe, F. (2016). <em>Systèmes d'information et management</em> (7<sup>e</sup> éd.). Vuibert.</p>
+<p class="ref">Robertson, S., &amp; Robertson, J. (2012). <em>Mastering the Requirements Process</em> (3<sup>e</sup> éd.). Addison-Wesley.</p>
+<p class="ref">Roques, P. (2018). <em>UML 2.5 par la pratique</em> (8<sup>e</sup> éd.). Eyrolles.</p>
+<p class="ref">Rumbaugh, J., Jacobson, I., &amp; Booch, G. (2004). <em>The Unified Modeling Language Reference Manual</em> (2<sup>e</sup> éd.). Addison-Wesley.</p>
+<p class="ref">Schneier, B. (2015). <em>Data and Goliath</em>. W. W. Norton.</p>
+<p class="ref">Shneiderman, B., Plaisant, C., Cohen, M., Jacobs, S., &amp; Elmqvist, N. (2016). <em>Designing the User Interface</em> (6<sup>e</sup> éd.). Pearson.</p>
+<p class="ref">Silberschatz, A., Korth, H. F., &amp; Sudarshan, S. (2019). <em>Database System Concepts</em> (7<sup>e</sup> éd.). McGraw-Hill.</p>
+<p class="ref">Sommerville, I. (2015). <em>Software Engineering</em> (10<sup>e</sup> éd.). Pearson.</p>
+<p class="ref">Stair, R., &amp; Reynolds, G. (2017). <em>Principles of Information Systems</em> (13<sup>e</sup> éd.). Cengage.</p>
+<p class="ref">Tardieu, H., Rochfeld, A., &amp; Colletti, R. (2000). <em>La méthode Merise</em>. Éditions d'Organisation.</p>
+<p class="ref">Turban, E., Pollard, C., &amp; Wood, G. (2018). <em>Information Technology for Management</em> (11<sup>e</sup> éd.). Wiley.</p>
+<p class="ref">Welling, L., &amp; Thomson, L. (2016). <em>PHP and MySQL Web Development</em> (5<sup>e</sup> éd.). Addison-Wesley.</p>
+<p class="ref">Whitten, J. L., &amp; Bentley, L. D. (2007). <em>Systems Analysis and Design Methods</em> (7<sup>e</sup> éd.). McGraw-Hill.</p>
+<p class="ref">Wiegers, K., &amp; Beatty, J. (2013). <em>Software Requirements</em> (3<sup>e</sup> éd.). Microsoft Press.</p>
+<p class="ref">Yin, R. K. (2018). <em>Case Study Research and Applications</em> (6<sup>e</sup> éd.). Sage.</p>
+<p class="ref">Yourdon, E. (1989). <em>Modern Structured Analysis</em>. Yourdon Press.</p>
+<p class="ref">Zikmund, W. G., Babin, B. J., Carr, J. C., &amp; Griffin, M. (2013). <em>Business Research Methods</em> (9<sup>e</sup> éd.). Cengage.</p>
+<p class="ref">Brynjolfsson, E., &amp; McAfee, A. (2014). <em>The Second Machine Age</em>. W. W. Norton.</p>
+
+
+<p class="ref">Boehm, B. W. (1981). <em>Software Engineering Economics</em>. Prentice Hall.</p>
+<p class="ref">Ohno, T. (1988). <em>Toyota Production System</em>. Productivity Press.</p>
+<p class="ref">Westerman, G., Bonnet, D., &amp; McAfee, A. (2014). <em>Leading Digital</em>. Harvard Business Review Press.</p>
+
+<h2>B. Articles scientifiques et contributions académiques</h2>
+
+<p class="ref">Alter, S. (2008). Defining information systems as work systems. <em>European Journal of Information Systems, 17</em>(5), 448–469.</p>
+<p class="ref">Beck, K., et al. (2001). <em>Manifesto for Agile Software Development</em>. https://agilemanifesto.org</p>
+<p class="ref">Boehm, B. W. (1988). A spiral model of software development and enhancement. <em>IEEE Computer, 21</em>(5), 61–72.</p>
+<p class="ref">Burke, E. K., De Causmaecker, P., Vanden Berghe, G., &amp; Van Landeghem, H. (2004). The state of the art of nurse rostering. <em>Journal of Scheduling, 7</em>(6), 441–499.</p>
+<p class="ref">Carr, N. G. (2003). IT doesn't matter. <em>Harvard Business Review, 81</em>(5), 41–49.</p>
+<p class="ref">Chamberlin, D. D., &amp; Boyce, R. F. (1974). SEQUEL: A structured English query language. <em>Proceedings of the ACM SIGFIDET</em>, 249–264.</p>
+<p class="ref">Chen, P. P. (1976). The entity-relationship model: Toward a unified view of data. <em>ACM TODS, 1</em>(1), 9–36.</p>
+<p class="ref">Codd, E. F. (1970). A relational model of data for large shared data banks. <em>Communications of the ACM, 13</em>(6), 377–387.</p>
+<p class="ref">Codd, E. F. (1972). Further normalization of the data base relational model. In R. Rustin (éd.), <em>Data Base Systems</em>. Prentice Hall.</p>
+<p class="ref">Davis, F. D. (1989). Perceived usefulness, perceived ease of use, and user acceptance of information technology. <em>MIS Quarterly, 13</em>(3), 319–340.</p>
+<p class="ref">Fielding, R. T. (2000). <em>Architectural Styles and the Design of Network-based Software Architectures</em> (thèse de doctorat). University of California, Irvine.</p>
+<p class="ref">Hevner, A. R., March, S. T., Park, J., &amp; Ram, S. (2004). Design science in information systems research. <em>MIS Quarterly, 28</em>(1), 75–105.</p>
+<p class="ref">Murugesan, S., Deshpande, Y., Hansen, S., &amp; Ginige, A. (2001). Web engineering: A new discipline. In <em>Web Engineering</em> (pp. 3–13). Springer.</p>
+<p class="ref">Parasuraman, A., Zeithaml, V. A., &amp; Berry, L. L. (1988). SERVQUAL: A multiple-item scale for measuring consumer perceptions of service quality. <em>Journal of Retailing, 64</em>(1), 12–40.</p>
+<p class="ref">Provos, N., &amp; Mazières, D. (1999). A future-adaptable password scheme. <em>USENIX Annual Technical Conference</em>.</p>
+<p class="ref">Reenskaug, T. (1979). <em>Models - Views - Controllers</em> (note technique Xerox PARC / Smalltalk).</p>
+<p class="ref">Sweller, J. (1988). Cognitive load during problem solving: Effects on learning. <em>Cognitive Science, 12</em>(2), 257–285.</p>
+<p class="ref">Venkatesh, V., Morris, M. G., Davis, G. B., &amp; Davis, F. D. (2003). User acceptance of information technology: Toward a unified view. <em>MIS Quarterly, 27</em>(3), 425–478.</p>
+<p class="ref">Wang, R. Y., &amp; Strong, D. M. (1996). Beyond accuracy: What data quality means to data consumers. <em>Journal of Management Information Systems, 12</em>(4), 5–33.</p>
+
+<h2>C. Normes, rapports institutionnels et guides professionnels</h2>
+
+<p class="ref">Banque mondiale. (2021). <em>World Development Report 2021: Data for Better Lives</em>. World Bank Group.</p>
+<p class="ref">Forrester Research. (2021). <em>The Future of Work and Digital Collaboration</em>. Forrester.</p>
+<p class="ref">Gartner. (2022). <em>Market Guide for Meeting / Scheduling Solutions</em>. Gartner, Inc.</p>
+<p class="ref">GSMA. (2023). <em>The Mobile Economy</em>. GSMA Intelligence.</p>
+<p class="ref">IEEE. (1990). <em>IEEE Standard Glossary of Software Engineering Terminology</em> (IEEE Std 610.12-1990).</p>
+<p class="ref">IEEE. (1998). <em>IEEE Recommended Practice for Software Requirements Specifications</em> (IEEE Std 830-1998).</p>
+<p class="ref">IEEE Computer Society. (2014). <em>Guide to the Software Engineering Body of Knowledge (SWEBOK)</em> (v3).</p>
+<p class="ref">ISO. (2015). <em>ISO 9001:2015 — Quality management systems — Requirements</em>. International Organization for Standardization.</p>
+<p class="ref">ISO/IEC. (2011). <em>ISO/IEC 25010 — Systems and software Quality Requirements and Evaluation (SQuaRE)</em>.</p>
+<p class="ref">ISTQB. (2019). <em>Certified Tester Foundation Level Syllabus</em>. International Software Testing Qualifications Board.</p>
+<p class="ref">ITU. (2023). <em>Measuring digital development: Facts and figures</em>. International Telecommunication Union.</p>
+<p class="ref">McKinsey Global Institute. (2016). <em>Digital globalization: The new era of global flows</em>. McKinsey &amp; Company.</p>
+<p class="ref">NIST. (2017/2024). <em>Digital Identity Guidelines</em> (SP 800-63). National Institute of Standards and Technology.</p>
+<p class="ref">OWASP Foundation. (2021). <em>OWASP Top Ten Web Application Security Risks</em>. https://owasp.org/Top10/</p>
+<p class="ref">Schwaber, K., &amp; Sutherland, J. (2020). <em>The Scrum Guide</em>. https://scrumguides.org</p>
+<p class="ref">W3C. (2023). <em>Web Content Accessibility Guidelines (WCAG) 2.2</em>. World Wide Web Consortium.</p>
+
+<h2>D. Documentation technique et webographie</h2>
+
+<p class="ref">Apache Friends. (2024). <em>XAMPP Documentation</em>. https://www.apachefriends.org</p>
+<p class="ref">Apache Software Foundation. (2024). <em>Apache HTTP Server Documentation</em>. https://httpd.apache.org/docs/</p>
+<p class="ref">Asana. (2024). <em>Asana Guide</em>. https://asana.com/guide</p>
+<p class="ref">Atlassian. (2024). <em>Trello and Jira product documentation</em>. https://www.atlassian.com</p>
+<p class="ref">Calendly. (2024). <em>Calendly Help Center</em>. https://help.calendly.com</p>
+<p class="ref">Can I Use. (2024). <em>Browser compatibility tables</em>. https://caniuse.com</p>
+<p class="ref">diagrams.net. (2024). <em>Draw.io documentation</em>. https://www.diagrams.net/doc</p>
+<p class="ref">FullCalendar. (2024). <em>FullCalendar Documentation</em>. https://fullcalendar.io/docs</p>
+<p class="ref">Git. (2024). <em>Git — Documentation</em>. https://git-scm.com/doc</p>
+<p class="ref">Google. (2024). <em>Google Calendar Help</em>. https://support.google.com/calendar</p>
+<p class="ref">IETF. (2012). <em>RFC 6749 — The OAuth 2.0 Authorization Framework</em>.</p>
+<p class="ref">IETF. (2022). <em>RFC 9110 — HTTP Semantics</em>.</p>
+<p class="ref">MariaDB Foundation. (2024). <em>MariaDB Server Documentation</em>. https://mariadb.com/kb/</p>
+<p class="ref">MDN Web Docs. (2024). <em>HTML / CSS / JavaScript reference</em>. Mozilla. https://developer.mozilla.org</p>
+<p class="ref">Microsoft. (2024). <em>Microsoft Bookings documentation</em>. https://learn.microsoft.com</p>
+<p class="ref">MySQL. (2024). <em>MySQL 8.0 Reference Manual</em>. Oracle Corporation. https://dev.mysql.com/doc/</p>
+<p class="ref">OpenClassrooms. (2024). Cours PHP, MySQL et analyse des besoins. https://openclassrooms.com</p>
+<p class="ref">PHP Group. (2024). <em>PHP Manual</em>. https://www.php.net/manual/en/</p>
+<p class="ref">phpMyAdmin Contributors. (2024). <em>phpMyAdmin User Guide</em>. https://www.phpmyadmin.net/docs/</p>
+<p class="ref">StarUML. (2024). <em>StarUML Documentation</em>. https://docs.staruml.io</p>
+<p class="ref">Unicode Consortium. (2024). <em>The Unicode Standard</em>. https://www.unicode.org</p>
+<p class="ref">Visual Paradigm. (2024). <em>UML / SysML guides</em>. https://www.visual-paradigm.com/guide/</p>
+
+<h2>E. Références complémentaires recommandées (approfondissement)</h2>
+
+<p class="ref">Ambler, S. W. (2004). <em>The Object Primer</em> (3<sup>e</sup> éd.). Cambridge University Press.</p>
+<p class="ref">Ballou, D. P., &amp; Pazer, H. L. (1985). Modeling data and process quality in multi-input, multi-output information systems. <em>Management Science, 31</em>(2), 150–162.</p>
+<p class="ref">Baskerville, R., &amp; Myers, M. D. (2002). Information systems as a reference discipline. <em>MIS Quarterly, 26</em>(1), 1–14.</p>
+<p class="ref">Benbasat, I., Goldstein, D. K., &amp; Mead, M. (1987). The case research strategy in studies of information systems. <em>MIS Quarterly, 11</em>(3), 369–386.</p>
+<p class="ref">Cohn, M. (2004). <em>User Stories Applied</em>. Addison-Wesley.</p>
+<p class="ref">DeLone, W. H., &amp; McLean, E. R. (2003). The DeLone and McLean model of information systems success: A ten-year update. <em>Journal of Management Information Systems, 19</em>(4), 9–30.</p>
+<p class="ref">Fitzgerald, B., Russo, N., &amp; Stolterman, E. (2002). <em>Information Systems Development: Methods in Action</em>. McGraw-Hill.</p>
+<p class="ref">Freeman, E., Robson, E., Bates, B., &amp; Sierra, K. (2004). <em>Head First Design Patterns</em>. O'Reilly.</p>
+<p class="ref">Henderson, J. C., &amp; Venkatraman, N. (1993). Strategic alignment: Leveraging information technology for transforming organizations. <em>IBM Systems Journal, 32</em>(1), 4–16.</p>
+<p class="ref">Jacobson, I., Christerson, M., Jonsson, P., &amp; Övergaard, G. (1992). <em>Object-Oriented Software Engineering</em>. Addison-Wesley.</p>
+<p class="ref">Keen, P. G. W. (1981). Information systems and organizational change. <em>Communications of the ACM, 24</em>(1), 24–33.</p>
+<p class="ref">Lyytinen, K., &amp; Hirschheim, R. (1987). Information systems failures — a survey and classification of the empirical literature. <em>Oxford Surveys in Information Technology, 4</em>, 257–309.</p>
+<p class="ref">Markus, M. L. (1983). Power, politics, and MIS implementation. <em>Communications of the ACM, 26</em>(6), 430–444.</p>
+<p class="ref">Orlikowski, W. J. (1992). The duality of technology: Rethinking the concept of technology in organizations. <em>Organization Science, 3</em>(3), 398–427.</p>
+<p class="ref">Pohl, K. (2010). <em>Requirements Engineering: Fundamentals, Principles, and Techniques</em>. Springer.</p>
+<p class="ref">Rogers, E. M. (2003). <em>Diffusion of Innovations</em> (5<sup>e</sup> éd.). Free Press.</p>
+<p class="ref">Satzinger, J. W., Jackson, R. B., &amp; Burd, S. D. (2015). <em>Systems Analysis and Design in a Changing World</em> (7<sup>e</sup> éd.). Cengage.</p>
+<p class="ref">Seddon, P. B. (1997). A respecification and extension of the DeLone and McLean model of IS success. <em>Information Systems Research, 8</em>(3), 240–253.</p>
+<p class="ref">Sharp, H., Rogers, Y., &amp; Preece, J. (2019). <em>Interaction Design: Beyond Human-Computer Interaction</em> (5<sup>e</sup> éd.). Wiley.</p>
+<p class="ref">Starbuck, W. H., &amp; Webster, J. (1991). When is play productive? <em>Accounting, Management and Information Technologies, 1</em>(1), 71–90.</p>
+<p class="ref">Valacich, J. S., &amp; George, J. F. (2020). <em>Modern Systems Analysis and Design</em> (9<sup>e</sup> éd.). Pearson.</p>
+<p class="ref">Vom Brocke, J., &amp; Rosemann, M. (éds.). (2015). <em>Handbook on Business Process Management</em> (2<sup>e</sup> éd.). Springer.</p>
+<p class="ref">Walsham, G. (1995). Interpretive case studies in IS research: Nature and method. <em>European Journal of Information Systems, 4</em>(2), 74–81.</p>
+<p class="ref">Weill, P., &amp; Ross, J. W. (2004). <em>IT Governance</em>. Harvard Business School Press.</p>
+<p class="ref">Zachman, J. A. (1987). A framework for information systems architecture. <em>IBM Systems Journal, 26</em>(3), 276–292.</p>
+
+<h2>F. Ressources du projet PLANIPRO (sources primaires)</h2>
+
+<p class="ref">PLANIPRO. (2024–2025). <em>README.md</em> — documentation d'installation et fonctionnalités. Dépôt local du projet.</p>
+<p class="ref">PLANIPRO. (2024–2025). <em>docs/CONCEPTION.md</em> — conception fonctionnelle et technique (acteurs, tables, flux).</p>
+<p class="ref">PLANIPRO. (2024–2025). <em>sql/schema.sql</em> — schéma physique de la base <span class="code">planipro</span>.</p>
+<p class="ref">PLANIPRO. (2024–2025). Code source PHP (répertoires <span class="code">pages/</span>, <span class="code">actions/</span>, <span class="code">includes/</span>).</p>
+
+<!-- ============================================================ -->
+<!-- ANNEXES -->
+<!-- ============================================================ -->
+<h1>ANNEXES</h1>
+
+<h2>Annexe A — Guide d'installation rapide</h2>
+<ol>
+  <li>Installer et démarrer XAMPP (Apache + MySQL).</li>
+  <li>Copier le projet dans <span class="code">htdocs/PLANIPRO</span>.</li>
+  <li>Importer <span class="code">sql/schema.sql</span> puis <span class="code">sql/seed.sql</span> via phpMyAdmin.</li>
+  <li>Ouvrir <span class="code">http://localhost/PLANIPRO/</span>.</li>
+</ol>
+<p class="no-indent"><strong>Comptes démo</strong> (mot de passe : <span class="code">password</span>) : entreprise@planipro.local, employe@planipro.local, client@planipro.local, partenaire@planipro.local.</p>
+
+<h2>Annexe B — Emplacement extrait SQL</h2>
+<div class="figure-slot">
+  <div class="fig-label">[ ANNEXE B — EXTRAIT schema.sql ]</div>
+  <span class="fig-hint">Coller ici 1 à 2 pages d'extrait SQL (CREATE TABLE users, entreprises, rendez_vous, activites) ou imprimer le fichier en annexe séparée.</span>
+</div>
+
+<h2>Annexe C — Dictionnaire de données complet</h2>
+<div class="figure-slot">
+  <div class="fig-label">[ ANNEXE C ]</div>
+  <span class="fig-hint">Reprendre les 12 tables détaillées depuis docs/CONCEPTION.md (tableaux attributs / types / contraintes).</span>
+</div>
+
+<h2>Annexe D — Captures d'écran complémentaires</h2>
+<div class="figure-slot">
+  <div class="fig-label">[ ANNEXE D — CAPTURES ]</div>
+  <span class="fig-hint">Insérer 8–12 captures : profil, paramètres entreprise (logo), création visiteur, messages reçus, espace partenaire, activité côté visiteur, etc.</span>
+</div>
+
+<h2>Annexe E — Grille d'entretien (étude de l'existant)</h2>
+<ul>
+  <li>Quels outils utilisez-vous aujourd'hui pour planifier vos rendez-vous ?</li>
+  <li>Combien de rendez-vous traitez-vous en moyenne par semaine ?</li>
+  <li>Qui valide les demandes ? Selon quelles règles ?</li>
+  <li>Comment suivez-vous les tâches / activités internes ?</li>
+  <li>Quels incidents (oublis, doubles RDV, conflits) avez-vous déjà rencontrés ?</li>
+  <li>Quelles informations aimeriez-vous voir dans un tableau de bord ?</li>
+  <li>Quel niveau de confidentialité exigez-vous entre clients / partenaires ?</li>
+</ul>
+
+<h2>Annexe F — Glossaire</h2>
+<ul>
+  <li><strong>PLANIPRO :</strong> application web de gestion des rendez-vous et activités professionnelles.</li>
+  <li><strong>Visiteur :</strong> compte opérationnel créé par l'entreprise (rôle technique <span class="code">employe</span>).</li>
+  <li><strong>Token public :</strong> identifiant permettant le suivi anonyme des notifications.</li>
+  <li><strong>PRG :</strong> Post-Redirect-Get.</li>
+  <li><strong>CSRF :</strong> Cross-Site Request Forgery.</li>
+  <li><strong>MCD / MLD / MPD :</strong> modèles conceptuel, logique et physique de données (Merise).</li>
+</ul>
+
+<h2>Annexe G — Checklist de soutenance (figures à préparer)</h2>
+<p class="no-indent">Avant impression / soutenance, vérifier que toutes les figures listées en « Liste des figures » sont remplacées par des images réelles (UML, captures, schémas). Les encadrés pointillés du présent document indiquent précisément où les insérer.</p>
+
+<p class="center" style="margin-top:3em;"><strong>— FIN DU MÉMOIRE —</strong></p>
+<p class="center small">Fichier : documents/MEMOIRE_PLANIPRO.html — Projet PLANIPRO<br>
+Personnaliser : noms, institution, logos, numéros de pages Word, figures et captures d'écran.</p>
+
+
+</body>
+</html>

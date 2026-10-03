@@ -1,0 +1,22 @@
+# Système
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Éditeurs
+.idea/
+.vscode/
+*.swp
+
+# PHP / dépendances
+/vendor/
+composer.phar
+
+# Journaux et fichiers temporaires
+*.log
+*.tmp
+*.cache
+
+# Fichiers uploadés par les utilisateurs (conserver le dossier)
+/uploads/entreprises/*
+!/uploads/entreprises/index.html

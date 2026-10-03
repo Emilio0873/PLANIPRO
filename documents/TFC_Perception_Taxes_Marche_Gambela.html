@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TFC — Système numérique de gestion de la perception des taxes — Marché Gambela</title>
+  <style>
+    :root {
+      --ink: #1a1a1a;
+      --mute: #444;
+      --line: #ccc;
+      --accent: #1e3a5f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Times New Roman", Times, serif;
+      font-size: 12pt;
+      line-height: 1.6;
+      color: var(--ink);
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 25mm 20mm;
+      background: #f5f5f5;
+    }
+    .page {
+      background: #fff;
+      padding: 25mm 22mm;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+    }
+    h1, h2, h3, h4 { font-family: Arial, Helvetica, sans-serif; color: var(--accent); }
+    .cover {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-align: center;
+      page-break-after: always;
+    }
+    .cover h1 {
+      font-size: 18pt;
+      line-height: 1.35;
+      text-transform: uppercase;
+      margin: 2rem 0;
+    }
+    .cover .meta { margin: .4rem 0; }
+    .cover .footer-cover { margin-top: 3rem; }
+    .toc { page-break-after: always; }
+    .toc ul { list-style: none; padding: 0; }
+    .toc li { margin: .35rem 0; }
+    .toc a { color: var(--ink); text-decoration: none; }
+    h2 {
+      font-size: 14pt;
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: .35rem;
+      margin-top: 2.2rem;
+      page-break-after: avoid;
+    }
+    h3 { font-size: 12.5pt; margin-top: 1.5rem; page-break-after: avoid; }
+    h4 { font-size: 12pt; margin-top: 1.2rem; color: #333; }
+    p { text-align: justify; margin: .7rem 0; }
+    .chapter-title {
+      text-align: center;
+      text-transform: uppercase;
+      margin: 3rem 0 1.5rem;
+      page-break-before: always;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 11pt;
+    }
+    th, td {
+      border: 1px solid var(--line);
+      padding: .45rem .55rem;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #eef2f7; }
+    ul, ol { margin: .5rem 0 .5rem 1.4rem; }
+    li { margin: .25rem 0; }
+    .figure {
+      border: 1px dashed var(--line);
+      padding: 1rem;
+      margin: 1rem 0;
+      background: #fafafa;
+      font-family: Arial, sans-serif;
+      font-size: 10.5pt;
+    }
+    .figure strong { display: block; margin-bottom: .5rem; color: var(--accent); }
+    .uml pre {
+      white-space: pre-wrap;
+      font-family: Consolas, "Courier New", monospace;
+      font-size: 9.5pt;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      padding: .8rem;
+      overflow-x: auto;
+    }
+    .note {
+      font-size: 10.5pt;
+      color: var(--mute);
+      font-style: italic;
+    }
+    @media print {
+      body { background: #fff; padding: 0; max-width: none; }
+      .page { box-shadow: none; padding: 0; }
+      .no-print { display: none; }
+      a { color: inherit; text-decoration: none; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <p class="no-print" style="font-family:Arial;background:#e8f0fe;padding:.8rem 1rem;border-radius:8px">
+    Document généré pour impression / export PDF (Ctrl+P). Titre et plan du TFC — Marché Gambela.
+  </p>
+
+  <!-- PAGE DE GARDE -->
+  <section class="cover">
+    <div>
+      <p class="meta"><strong>RÉPUBLIQUE DÉMOCRATIQUE DU CONGO</strong></p>
+      <p class="meta">Ministère de l’Enseignement Supérieur et Universitaire</p>
+      <p class="meta">[Nom de l’institution / Institut]</p>
+      <p class="meta">Département d’Informatique</p>
+    </div>
+    <div>
+      <p><em>Travail de Fin de Cycle présenté en vue de l’obtention du grade de Gradué en Informatique</em></p>
+      <h1>Mise en place d’un système numérique de gestion de la perception des taxes pour l’amélioration de la transparence et de l’efficacité du recouvrement fiscal : cas du marché Gambela</h1>
+    </div>
+    <div>
+      <p class="meta"><strong>Présenté et défendu par :</strong></p>
+      <p class="meta">[Nom et post-nom de l’étudiant]</p>
+      <p class="meta" style="margin-top:1.5rem"><strong>Sous la direction de :</strong></p>
+      <p class="meta">[Nom du promoteur / directeur de mémoire]</p>
+    </div>
+    <div class="footer-cover">
+      <p class="meta">Année académique [2024–2025]</p>
+    </div>
+  </section>
+
+  <!-- TABLE DES MATIÈRES -->
+  <section class="toc">
+    <h2>Table des matières</h2>
+    <ul>
+      <li><a href="#intro">Introduction générale</a></li>
+      <li><a href="#ch1">Chapitre I — Cadre théorique et présentation du milieu d’étude</a></li>
+      <li><a href="#ch2">Chapitre II — Analyse et conception du système</a></li>
+      <li><a href="#ch3">Chapitre III — Réalisation du système</a></li>
+      <li><a href="#ch4">Chapitre IV — Tests, résultats et évaluation</a></li>
+      <li><a href="#concl">Conclusion générale</a></li>
+      <li><a href="#biblio">Bibliographie</a></li>
+      <li><a href="#annexes">Annexes</a></li>
+    </ul>
+  </section>
+
+  <!-- INTRODUCTION -->
+  <h2 id="intro">Introduction générale</h2>
+
+  <h3>Contexte de l’étude</h3>
+  <p>
+    Dans un contexte de modernisation de la gouvernance locale, la digitalisation des services publics
+    apparaît comme un levier majeur d’amélioration de la transparence, de la traçabilité et de
+    l’efficacité administrative. Au niveau des collectivités territoriales, la perception des taxes
+    de marché constitue une source importante de recettes destinées au financement des services
+    de proximité. Pourtant, dans de nombreux marchés urbains, cette perception demeure encore
+    largement manuelle, exposée aux erreurs, aux retards, aux pertes de documents et aux
+    possibilités de malversations.
+  </p>
+  <p>
+    Le marché Gambela, espace commercial dynamique regroupant de nombreux commerçants et
+    catégories d’activités, illustre cette réalité. La gestion actuelle des taxes y repose sur des
+    procédés papier et des registres dispersés, ce qui limite le suivi en temps réel des paiements,
+    complique le contrôle et affaiblit la confiance entre administration et contribuables.
+  </p>
+  <p>
+    L’essor des technologies web (PHP, MySQL, interfaces HTML/CSS/JavaScript) offre aujourd’hui
+    la possibilité de concevoir des applications accessibles, sécurisées et adaptées aux réalités
+    locales, capables de centraliser les informations fiscales, d’automatiser la délivrance des
+    reçus et de produire des rapports fiables pour la prise de décision.
+  </p>
+
+  <h3>Problématique</h3>
+  <p>
+    Comment la mise en place d’un système numérique de gestion de la perception des taxes peut-elle
+    améliorer la transparence et l’efficacité du recouvrement fiscal au marché Gambela ?
+  </p>
+  <p>
+    De manière plus précise, le problème se pose en ces termes : face aux limites du système manuel
+    (manque de traçabilité, lenteur, risques d’erreurs et de détournements, difficulté à produire
+    des statistiques fiables), quelle solution informatique peut être conçue, réalisée et évaluée
+    pour moderniser le processus de perception tout en respectant l’organisation administrative
+    du marché ?
+  </p>
+
+  <h3>Questions de recherche</h3>
+  <ol>
+    <li>Quelles sont les faiblesses du système actuel de perception des taxes au marché Gambela ?</li>
+    <li>Quels besoins fonctionnels et non fonctionnels un système numérique doit-il couvrir pour les acteurs du marché ?</li>
+    <li>Comment concevoir et réaliser une application web permettant l’enregistrement des paiements, la génération des reçus et le suivi des recettes ?</li>
+    <li>Dans quelle mesure le système proposé améliore-t-il la transparence et l’efficacité du recouvrement par rapport à l’existant ?</li>
+  </ol>
+
+  <h3>Hypothèses</h3>
+  <ul>
+    <li><strong>H1 :</strong> La digitalisation de la perception réduit significativement les erreurs et les pertes d’information liées au traitement manuel.</li>
+    <li><strong>H2 :</strong> Un système centralisé avec authentification et journalisation renforce la transparence et la traçabilité des opérations fiscales.</li>
+    <li><strong>H3 :</strong> La génération automatique de reçus et de rapports accélère le contrôle et améliore l’efficacité du recouvrement.</li>
+    <li><strong>H4 :</strong> L’implication des acteurs (administrateur, agents, commerçants, responsable) dans l’analyse des besoins favorise l’adoption du système.</li>
+  </ul>
+
+  <h3>Objectif général</h3>
+  <p>
+    Mettre en place un système numérique de gestion de la perception des taxes au marché Gambela
+    afin d’améliorer la transparence et l’efficacité du recouvrement fiscal.
+  </p>
+
+  <h3>Objectifs spécifiques</h3>
+  <ul>
+    <li>Analyser le fonctionnement actuel de la perception des taxes et identifier ses limites.</li>
+    <li>Recueillir et formaliser les besoins des différents acteurs.</li>
+    <li>Concevoir le système (modélisation UML, base de données, architecture).</li>
+    <li>Réaliser une application web (authentification, gestion des commerçants/agents, taxes, paiements, reçus, rapports).</li>
+    <li>Tester et évaluer le système au regard des critères de transparence, rapidité et fiabilité.</li>
+  </ul>
+
+  <h3>Choix et intérêt du sujet</h3>
+  <p>
+    Le choix de ce sujet se justifie par son double intérêt. Sur le plan scientifique et pédagogique,
+    il permet d’appliquer le cycle complet de développement d’un système d’information
+    (analyse, conception, réalisation, tests). Sur le plan socio-économique, il répond à un besoin
+    concret de modernisation de la collecte fiscale locale, avec des retombées attendues en matière
+    de recettes, de gouvernance et de relation avec les commerçants.
+  </p>
+
+  <h3>Délimitation de l’étude</h3>
+  <p>
+    L’étude se limite géographiquement au marché Gambela. Fonctionnellement, elle porte sur la
+    gestion numérique de la perception des taxes de marché (enregistrement des contribuables,
+    catégories de taxes, paiements, reçus et rapports). Sont exclus : la fiscalité nationale
+    complexe hors taxes de marché, le paiement mobile en première version (envisagé en perspectives),
+    ainsi que les aspects juridiques exhaustifs du droit fiscal congolais au-delà du cadre utile
+    à la compréhension du processus.
+  </p>
+
+  <h3>Méthodes et techniques utilisées</h3>
+  <ul>
+    <li><strong>Recherche documentaire :</strong> ouvrages, articles et travaux sur la fiscalité locale et les SI.</li>
+    <li><strong>Observation :</strong> fonctionnement du marché et circuits de perception.</li>
+    <li><strong>Entretiens :</strong> agents percepteurs, responsable du marché, commerçants.</li>
+    <li><strong>Analyse et conception :</strong> approche structurée, UML, Merise (MCD/MLD).</li>
+    <li><strong>Développement :</strong> prototypage web (PHP/MySQL) et tests fonctionnels.</li>
+  </ul>
+
+  <h3>Structure du travail</h3>
+  <p>
+    Le travail comporte quatre chapitres. Le premier présente le cadre théorique et le milieu
+    d’étude. Le deuxième analyse les besoins et conçoit le système. Le troisième décrit la
+    réalisation technique. Le quatrième expose les tests, résultats et évaluation, avant une
+    conclusion générale.
+  </p>
+
+  <!-- CHAPITRE I -->
+  <h2 class="chapter-title" id="ch1">Chapitre I — Cadre théorique et présentation du milieu d’étude</h2>
+
+  <h3>1.1 Généralités sur les taxes</h3>
+  <h4>Définition de la taxe</h4>
+  <p>
+    La taxe est un prélèvement obligatoire perçu par une autorité publique en contrepartie
+    d’un service rendu ou de l’usage d’un espace/équipement public. Contrairement à l’impôt
+    stricto sensu, elle est souvent liée à une prestation identifiable (occupation d’un étal,
+    droit de place, service de marché, etc.).
+  </p>
+  <h4>Types de taxes</h4>
+  <p>Dans le contexte d’un marché, on distingue notamment :</p>
+  <ul>
+    <li>taxes journalières ou périodiques de place ;</li>
+    <li>taxes liées à la catégorie d’activité (alimentaire, textile, artisanat, etc.) ;</li>
+    <li>taxes forfaitaires ou proportionnelles selon le type de stand ;</li>
+    <li>éventuelles redevances pour services annexes (sécurité, assainissement, stationnement).</li>
+  </ul>
+  <h4>Importance des taxes dans les collectivités</h4>
+  <p>
+    Les taxes de marché financent l’entretien des infrastructures, la salubrité, la sécurité et
+    le fonctionnement administratif local. Un recouvrement efficace renforce l’autonomie financière
+    et la capacité d’investissement de la collectivité.
+  </p>
+
+  <h3>1.2 Gestion des taxes</h3>
+  <h4>Concepts de gestion</h4>
+  <p>
+    Gérer les taxes implique d’identifier les redevables, de fixer les barèmes, d’encaisser,
+    de comptabiliser, de contrôler et de rendre compte. La qualité de cette gestion dépend de
+    la clarté des procédures, de la compétence des agents et de la fiabilité des supports d’information.
+  </p>
+  <h4>Processus de perception des taxes</h4>
+  <ol>
+    <li>Identification / inscription du commerçant et de son emplacement.</li>
+    <li>Détermination de la catégorie et du montant dû.</li>
+    <li>Encaissement par l’agent percepteur.</li>
+    <li>Délivrance d’un reçu.</li>
+    <li>Centralisation et rapport au responsable / administration.</li>
+  </ol>
+  <h4>Difficultés rencontrées dans la gestion manuelle</h4>
+  <ul>
+    <li>Registres incomplets ou illisibles ;</li>
+    <li>Doubles paiements ou omissions ;</li>
+    <li>Retards dans la consolidation des recettes ;</li>
+    <li>Difficulté de contrôler les agents en tournée ;</li>
+    <li>Absence de statistiques rapides pour le pilotage.</li>
+  </ul>
+
+  <h3>1.3 Système numérique de gestion</h3>
+  <h4>Définition</h4>
+  <p>
+    Un système numérique de gestion de la perception est une application informatique qui
+    digitalise le cycle fiscal local : référentiels (commerçants, taxes), transactions (paiements),
+    documents (reçus) et tableaux de bord (rapports).
+  </p>
+  <h4>Caractéristiques</h4>
+  <ul>
+    <li>Centralisation des données ;</li>
+    <li>Accès contrôlé par rôles ;</li>
+    <li>Traçabilité des opérations ;</li>
+    <li>Automatisation des calculs et documents ;</li>
+    <li>Disponibilité via navigateur (architecture web).</li>
+  </ul>
+  <h4>Avantages</h4>
+  <ul>
+    <li>Réduction des erreurs de saisie et de calcul ;</li>
+    <li>Amélioration de la transparence ;</li>
+    <li>Rapidité de production des reçus et rapports ;</li>
+    <li>Meilleur suivi des impayés et des performances de recouvrement.</li>
+  </ul>
+
+  <h3>1.4 Présentation du marché Gambela</h3>
+  <h4>Historique</h4>
+  <p>
+    Le marché Gambela s’est développé comme place commerciale de proximité, accueillant progressivement
+    des commerçants de diverses branches. Son importance économique locale en fait un point sensible
+    pour la fiscalité de marché. <span class="note">(À compléter avec les données historiques précises recueillies sur le terrain.)</span>
+  </p>
+  <h4>Situation géographique</h4>
+  <p>
+    Situé dans son environnement urbain de rattachement, le marché Gambela dessert une population
+    de consommateurs et d’opérateurs commerciaux. Sa localisation influence les flux quotidiens
+    et l’organisation des tournées de perception. <span class="note">(Préciser commune/quartier, voies d’accès.)</span>
+  </p>
+  <h4>Organisation administrative</h4>
+  <p>
+    L’organisation typique associe un responsable du marché, des agents de perception, et parfois
+    des représentants de commerçants. L’administration fixe les barèmes et supervise les recettes.
+  </p>
+  <h4>Fonctionnement actuel de la perception des taxes</h4>
+  <p>
+    Actuellement, la perception s’effectue principalement de façon manuelle : l’agent encaissse,
+    consigne sur un carnet/registre et remet un reçu papier. Les consolidations périodiques
+    sont réalisées a posteriori, souvent avec des écarts difficiles à expliquer.
+  </p>
+
+  <h3>1.5 Étude de l’existant</h3>
+  <h4>Analyse du système actuel</h4>
+  <p>
+    Le système existant repose sur des supports physiques et une connaissance implicite des
+    commerçants par les agents. Il permet un fonctionnement minimal au quotidien, mais offre
+    peu de garanties de cohérence globale des données.
+  </p>
+  <h4>Limites du système existant</h4>
+  <ul>
+    <li>Pas de base de données unique et à jour ;</li>
+    <li>Contrôle difficile des reçus et annulations ;</li>
+    <li>Rapports lents et peu fiables ;</li>
+    <li>Faible transparence pour le commerçant et l’administration.</li>
+  </ul>
+  <h4>Critique de l’existant</h4>
+  <p>
+    Sans remettre en cause l’utilité du personnel de terrain, le dispositif manuel n’est plus
+    adapté à l’exigence contemporaine de redevabilité. Il crée une asymétrie d’information et
+    fragilise le recouvrement.
+  </p>
+
+  <h3>1.6 Proposition de solution</h3>
+  <p>
+    Nous proposons une application web multi-rôles permettant : l’enregistrement des commerçants,
+    la configuration des catégories de taxes, la saisie sécurisée des paiements par les agents,
+    la génération de reçus, et la production de rapports pour le responsable et l’administrateur.
+    La solution sera déployable en environnement local (XAMPP) puis adaptable à un serveur distant.
+  </p>
+
+  <!-- CHAPITRE II -->
+  <h2 class="chapter-title" id="ch2">Chapitre II — Analyse et conception du système</h2>
+
+  <h3>2.1 Analyse des besoins</h3>
+  <h4>Besoins fonctionnels</h4>
+  <ul>
+    <li>Authentifier les utilisateurs selon leur rôle ;</li>
+    <li>Gérer les commerçants (création, modification, activation/désactivation) ;</li>
+    <li>Gérer les agents percepteurs ;</li>
+    <li>Gérer les catégories et tarifs de taxes ;</li>
+    <li>Enregistrer les paiements et associer commerçant / taxe / agent / date ;</li>
+    <li>Générer et imprimer/télécharger des reçus ;</li>
+    <li>Consulter l’historique et produire des statistiques / rapports.</li>
+  </ul>
+  <h4>Besoins non fonctionnels</h4>
+  <ul>
+    <li><strong>Sécurité :</strong> mots de passe hashés, sessions, contrôle d’accès.</li>
+    <li><strong>Usabilité :</strong> interface simple, en français, adaptée au terrain.</li>
+    <li><strong>Performance :</strong> temps de réponse acceptable sur réseau local.</li>
+    <li><strong>Fiabilité :</strong> intégrité des montants et historisation.</li>
+    <li><strong>Maintenabilité :</strong> code structuré, base documentée.</li>
+  </ul>
+
+  <h3>2.2 Identification des acteurs</h3>
+  <table>
+    <thead>
+      <tr><th>Acteur</th><th>Rôle principal</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Administrateur</td><td>Paramétrage global, utilisateurs, supervision</td></tr>
+      <tr><td>Agent percepteur</td><td>Enregistrement des paiements, émission des reçus</td></tr>
+      <tr><td>Commerçant</td><td>Consultation de son historique / situation (selon périmètre)</td></tr>
+      <tr><td>Responsable du marché</td><td>Suivi des recettes, validation, rapports</td></tr>
+    </tbody>
+  </table>
+
+  <h3>2.3 Modélisation du système</h3>
+  <h4>Diagramme de cas d’utilisation</h4>
+  <div class="figure uml">
+    <strong>Figure 2.1 — Cas d’utilisation (synthèse textuelle UML)</strong>
+    <pre>Acteurs : Administrateur, Agent, Commerçant, Responsable
+
+Administrateur :
+  - Gérer utilisateurs
+  - Gérer catégories de taxes
+  - Consulter tous les rapports
+
+Agent percepteur :
+  - S’authentifier
+  - Rechercher un commerçant
+  - Enregistrer un paiement
+  - Générer un reçu
+
+Commerçant :
+  - S’authentifier (option)
+  - Consulter ses paiements / reçus
+
+Responsable du marché :
+  - Consulter tableaux de bord
+  - Exporter rapports de perception
+  - Suivre les agents</pre>
+  </div>
+
+  <h4>Diagramme de classes</h4>
+  <div class="figure uml">
+    <strong>Figure 2.2 — Classes principales</strong>
+    <pre>Utilisateur (id, nom, prenom, email, mot_de_passe, role, actif)
+Commercant (id, code, nom, prenom, telephone, emplacement, categorie_activite, actif)
+Agent (lié à Utilisateur rôle agent / zone)
+CategorieTaxe (id, libelle, montant, periodicite, actif)
+Paiement (id, commerçant_id, taxe_id, agent_id, montant, date_paiement, mode, reference_recu, statut)
+Recu (id, paiement_id, numero, date_emission)
+Rapport (vues/requêtes dérivées des paiements)</pre>
+  </div>
+
+  <h4>Diagramme de séquence (paiement)</h4>
+  <div class="figure uml">
+    <strong>Figure 2.3 — Séquence « Enregistrer un paiement »</strong>
+    <pre>Agent -> Interface : saisit commerçant + taxe
+Interface -> Controleur : valider formulaire
+Controleur -> BaseDeDonnees : vérifier commerçant/taxe
+Controleur -> BaseDeDonnees : insérer paiement
+Controleur -> BaseDeDonnees : générer numéro de reçu
+Controleur -> Interface : afficher / imprimer reçu</pre>
+  </div>
+
+  <h4>Diagramme d’activités</h4>
+  <div class="figure">
+    <strong>Figure 2.4 — Activité de perception</strong>
+    <p>
+      Début → Authentification agent → Sélection commerçant → Sélection taxe → Saisie/validation montant
+      → Enregistrement → Génération reçu → Fin. En cas d’erreur : message et retour à la saisie.
+    </p>
+  </div>
+
+  <h3>2.4 Conception de la base de données</h3>
+  <h4>Modèle conceptuel des données (MCD)</h4>
+  <p>
+    Entités principales : UTILISATEUR, COMMERCANT, CATEGORIE_TAXE, PAIEMENT, RECU.
+    Associations : un commerçant effectue plusieurs paiements ; une catégorie de taxe concerne
+    plusieurs paiements ; un agent enregistre plusieurs paiements ; un paiement génère un reçu.
+  </p>
+  <h4>Modèle logique des données (MLD)</h4>
+  <div class="figure uml">
+    <pre>UTILISATEURS (id, nom, prenom, email, password_hash, role, actif, created_at)
+COMMERCANTS (id, code, nom, prenom, telephone, emplacement, activite, actif, created_at)
+CATEGORIES_TAXES (id, libelle, montant, periodicite, actif)
+PAIEMENTS (id, commerçant_id#, categorie_taxe_id#, agent_id#, montant, date_paiement, mode_paiement, statut, created_at)
+RECUS (id, paiement_id#, numero_recu, emis_le)</pre>
+  </div>
+  <h4>Dictionnaire de données (extrait)</h4>
+  <table>
+    <thead>
+      <tr><th>Attribut</th><th>Type</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>email</td><td>VARCHAR(150)</td><td>Identifiant de connexion</td></tr>
+      <tr><td>password_hash</td><td>VARCHAR(255)</td><td>Mot de passe chiffré</td></tr>
+      <tr><td>montant</td><td>DECIMAL(12,2)</td><td>Montant perçu</td></tr>
+      <tr><td>numero_recu</td><td>VARCHAR(30)</td><td>Référence unique du reçu</td></tr>
+      <tr><td>emplacement</td><td>VARCHAR(100)</td><td>Place / stand du commerçant</td></tr>
+      <tr><td>role</td><td>ENUM</td><td>admin, agent, responsable, commercant</td></tr>
+    </tbody>
+  </table>
+
+  <h3>2.5 Architecture du système</h3>
+  <p>
+    Architecture client-serveur en 3 niveaux : navigateur (présentation), serveur applicatif PHP
+    (logique métier), serveur de données MySQL (persistance). Déploiement initial via XAMPP
+    (Apache + MySQL + PHP).
+  </p>
+
+  <!-- CHAPITRE III -->
+  <h2 class="chapter-title" id="ch3">Chapitre III — Réalisation du système</h2>
+
+  <h3>3.1 Choix des outils de développement</h3>
+  <table>
+    <thead><tr><th>Outil</th><th>Rôle</th></tr></thead>
+    <tbody>
+      <tr><td>HTML5</td><td>Structure des pages</td></tr>
+      <tr><td>CSS3</td><td>Mise en forme et ergonomie</td></tr>
+      <tr><td>JavaScript</td><td>Interactivité côté client</td></tr>
+      <tr><td>PHP</td><td>Traitements serveur et sécurité session</td></tr>
+      <tr><td>MySQL</td><td>Stockage relationnel</td></tr>
+      <tr><td>XAMPP</td><td>Environnement local de développement</td></tr>
+    </tbody>
+  </table>
+  <p>
+    Ces technologies sont gratuites, largement documentées et adaptées aux TFC en informatique,
+    tout en restant réalistes pour un déploiement local institutionnel.
+  </p>
+
+  <h3>3.2 Conception de l’interface utilisateur</h3>
+  <p>
+    L’interface privilégie la clarté : menu selon le rôle, formulaires courts, messages de
+    confirmation/erreur, tableaux filtrables et boutons d’action explicites (« Enregistrer »,
+    « Imprimer le reçu », « Voir le rapport »). Une charte simple (couleurs sobres, typographie
+    lisible) facilite l’usage par des agents non spécialistes.
+  </p>
+
+  <h3>3.3 Développement des principales fonctionnalités</h3>
+  <h4>Authentification</h4>
+  <p>
+    Connexion par email/mot de passe, vérification du hash, création de session, redirection
+    selon le rôle, déconnexion sécurisée.
+  </p>
+  <h4>Gestion des commerçants</h4>
+  <p>
+    CRUD des commerçants avec code unique, emplacement, contacts et statut actif/inactif.
+  </p>
+  <h4>Gestion des agents</h4>
+  <p>
+    Création de comptes agents, affectation éventuelle à une zone, activation/désactivation.
+  </p>
+  <h4>Gestion des catégories de taxes</h4>
+  <p>
+    Paramétrage des libellés, montants et périodicités ; possibilité de désactiver une taxe obsolète.
+  </p>
+  <h4>Enregistrement des paiements</h4>
+  <p>
+    Formulaire lié au commerçant et à la taxe ; calcul/rappel du montant ; enregistrement horodaté
+    avec l’identifiant de l’agent connecté.
+  </p>
+  <h4>Génération des reçus</h4>
+  <p>
+    Numérotation unique, affichage imprimable, conservation en base pour contrôle ultérieur.
+  </p>
+  <h4>Rapports et statistiques</h4>
+  <p>
+    Totaux par jour/période, par agent, par catégorie de taxe ; exports simples (HTML/PDF/CSV selon version).
+  </p>
+
+  <h3>3.4 Structure de la base de données</h3>
+  <p>
+    La base <em>gambela_taxes</em> (nom indicatif) contient les tables du MLD. Des index sont
+    placés sur les clés étrangères et sur <em>numero_recu</em>, <em>date_paiement</em>,
+    <em>email</em> pour accélérer les recherches.
+  </p>
+
+  <h3>3.5 Sécurité du système</h3>
+  <ul>
+    <li>Hashage des mots de passe (algorithme moderne type bcrypt via <code>password_hash</code>) ;</li>
+    <li>Protection CSRF sur les formulaires sensibles ;</li>
+    <li>Requêtes préparées contre l’injection SQL ;</li>
+    <li>Échappement des sorties (XSS) ;</li>
+    <li>Contrôle d’autorisation par rôle à chaque page/action ;</li>
+    <li>Journalisation des opérations critiques (paiements, annulations).</li>
+  </ul>
+
+  <!-- CHAPITRE IV -->
+  <h2 class="chapter-title" id="ch4">Chapitre IV — Tests, résultats et évaluation</h2>
+
+  <h3>4.1 Tests du système</h3>
+  <h4>Tests unitaires</h4>
+  <p>
+    Vérification des fonctions critiques : authentification, calcul/enregistrement de paiement,
+    unicité du numéro de reçu, filtres de rapports.
+  </p>
+  <h4>Tests fonctionnels</h4>
+  <table>
+    <thead><tr><th>Scénario</th><th>Résultat attendu</th></tr></thead>
+    <tbody>
+      <tr><td>Connexion agent valide</td><td>Accès au module paiements</td></tr>
+      <tr><td>Connexion invalide</td><td>Message d’erreur, pas de session</td></tr>
+      <tr><td>Paiement d’un commerçant</td><td>Enregistrement + reçu généré</td></tr>
+      <tr><td>Consultation rapport journalier</td><td>Total cohérent avec les saisies</td></tr>
+      <tr><td>Accès admin à page agent</td><td>Refus / redirection</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4.2 Présentation des résultats</h3>
+  <p>
+    Le prototype réalisé couvre le périmètre défini : référentiels, perception, reçus et rapports.
+    Les interfaces permettent un enchaînement fluide de la saisie à l’édition du reçu.
+    <span class="note">(Insérer ici captures d’écran annotées : login, dashboard, paiement, reçu, rapport.)</span>
+  </p>
+
+  <h3>4.3 Évaluation du système</h3>
+  <p>
+    L’évaluation qualitative auprès des acteurs (démonstration / essais guidés) porte sur :
+    facilité d’usage, clarté des reçus, sentiment de transparence, rapidité perçue par rapport
+    au carnet manuel. L’évaluation technique vérifie l’intégrité des données et le respect des droits d’accès.
+  </p>
+
+  <h3>4.4 Avantages du système proposé</h3>
+  <ul>
+    <li>Traçabilité des encaissements ;</li>
+    <li>Réduction des pertes de documents ;</li>
+    <li>Meilleure visibilité des recettes pour le responsable ;</li>
+    <li>Base pour l’audit et la lutte contre les irrégularités.</li>
+  </ul>
+
+  <h3>4.5 Limites du système</h3>
+  <ul>
+    <li>Dépendance à la disponibilité de l’outil informatique et de l’électricité/réseau ;</li>
+    <li>Nécessité de former les agents ;</li>
+    <li>Périmètre V1 sans paiement mobile ni mode hors-ligne avancé ;</li>
+    <li>Données de terrain à enrichir pour une généralisation.</li>
+  </ul>
+
+  <h3>4.6 Perspectives d’amélioration</h3>
+  <ul>
+    <li>Paiement via Mobile Money ;</li>
+    <li>Application mobile légère pour les tournées ;</li>
+    <li>Notifications SMS de confirmation au commerçant ;</li>
+    <li>Tableaux de bord avancés et archivage légal ;</li>
+    <li>Interopérabilité avec la comptabilité de la collectivité.</li>
+  </ul>
+
+  <!-- CONCLUSION -->
+  <h2 id="concl">Conclusion générale</h2>
+
+  <h3>Synthèse des travaux réalisés</h3>
+  <p>
+    Ce travail a permis d’analyser les limites de la perception manuelle des taxes au marché Gambela,
+    de concevoir une solution numérique adaptée aux acteurs locaux, de la réaliser avec des
+    technologies web accessibles, puis d’en évaluer la pertinence au regard de la transparence
+    et de l’efficacité du recouvrement.
+  </p>
+
+  <h3>Vérification des hypothèses</h3>
+  <ul>
+    <li><strong>H1 :</strong> confirmée dans le principe — la saisie structurée et les contrôles réduisent les erreurs typiques du papier.</li>
+    <li><strong>H2 :</strong> confirmée — rôles, sessions et historisation améliorent la traçabilité.</li>
+    <li><strong>H3 :</strong> confirmée — reçus et rapports automatisés accélèrent le suivi.</li>
+    <li><strong>H4 :</strong> partiellement vérifiable — l’adhésion dépendra de la formation et de l’accompagnement au déploiement.</li>
+  </ul>
+
+  <h3>Recommandations</h3>
+  <ol>
+    <li>Former progressivement les agents et le responsable avant le passage en production.</li>
+    <li>Définir une procédure claire d’annulation/correction des paiements.</li>
+    <li>Assurer des sauvegardes régulières de la base de données.</li>
+    <li>Maintenir un double contrôle périodique (système + caisse) durant la phase de transition.</li>
+    <li>Impliquer les représentants des commerçants pour renforcer la confiance.</li>
+  </ol>
+
+  <h3>Perspectives futures</h3>
+  <p>
+    À moyen terme, le système pourra évoluer vers une plateforme plus complète de gouvernance
+    fiscale locale, intégrant paiement électronique, géolocalisation des tournées et indicateurs
+    de performance ouverts aux décideurs. Le cas du marché Gambela pourra alors servir de modèle
+    reproductible pour d’autres marchés.
+  </p>
+
+  <!-- BIBLIOGRAPHIE -->
+  <h2 id="biblio">Bibliographie (indicatif — à compléter)</h2>
+  <ol>
+    <li>Ouvrages et cours sur les systèmes d’information et UML.</li>
+    <li>Documentation officielle PHP, MySQL, HTML/CSS.</li>
+    <li>Textes et documents relatifs à la fiscalité des collectivités (RDC) — à citer précisément.</li>
+    <li>Travaux académiques antérieurs sur la digitalisation de la perception fiscale / e-gouvernement local.</li>
+    <li>Rapports ou données internes du marché Gambela (entretiens, observations).</li>
+  </ol>
+
+  <!-- ANNEXES -->
+  <h2 id="annexes">Annexes (à constituer)</h2>
+  <ul>
+    <li>Annexe A — Guide d’entretien</li>
+    <li>Annexe B — Captures d’écran du système</li>
+    <li>Annexe C — Script SQL de création de la base</li>
+    <li>Annexe D — Manuel utilisateur (agent / responsable)</li>
+    <li>Annexe E — Jeu de données de test</li>
+  </ul>
+
+  <p style="margin-top:3rem;text-align:center" class="note">
+    — Fin du document de base —<br>
+    Compléter les passages entre crochets et les notes italiques avec vos données de terrain.
+  </p>
+
+</div>
+</body>
+</html>
